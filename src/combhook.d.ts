@@ -17,9 +17,9 @@ export type GetLabelPropsReturns = {
 export type GetLabelProps = () => GetLabelPropsReturns;
 
 export type GetComboBoxPropsReturns = {
+	'aria-expanded': boolean;
 	'aria-haspopup': 'listbox';
 	'aria-owns': string;
-	'aria-expanded': boolean;
 	role: 'combobox';
 };
 export type GetComboBoxProps = () => GetComboBoxPropsReturns;
@@ -56,19 +56,19 @@ export type GetItemPropsArgs<T> = { item: T; index: number };
 export type GetItemPropsReturns = {
 	'aria-selected': boolean;
 	id: string;
-	role: 'option';
 	onClick: (event: MouseEvent) => void;
+	role: 'option';
 };
 export type GetItemProps<T> = (
 	args: GetItemPropsArgs<T>
 ) => GetItemPropsReturns;
 
 export interface UseComboBoxArgs<T> {
+	filterFn?: FilterFn<T>;
 	id: string;
 	items?: T[];
 	itemToString?: ItemToStringFn<T>;
-	placeholder?: string;
-	filterFn?: FilterFn<T>;
 	onInputValueChange?: (value?: string) => void;
 	onSelectedItemChange: (item: T) => void;
+	placeholder?: string;
 }
