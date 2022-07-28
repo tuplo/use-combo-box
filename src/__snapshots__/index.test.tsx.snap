@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useComboBox renders 1`] = `
+<div>
+  <div>
+    <label
+      for="foobar-input"
+      id="foobar-label"
+    >
+      Choose
+    </label>
+    <div
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-owns="foobar-menu"
+      role="combobox"
+    >
+      <input
+        aria-autocomplete="list"
+        aria-controls="foobar-menu"
+        aria-labelledby="foobar-label"
+        autocomplete="off"
+        id="foobar-input"
+        role="textbox"
+        value=""
+      />
+      <button
+        id="foobar-toggle-button"
+        tabindex="-1"
+        type="button"
+      >
+        Toggle
+      </button>
+    </div>
+    <ul
+      aria-labelledby="foobar-label"
+      id="foobar-menu"
+      role="listbox"
+    >
+      <li
+        aria-selected="false"
+        id="foobar-option-item-1"
+        role="option"
+      >
+        Alice
+      </li>
+      <li
+        aria-selected="false"
+        id="foobar-option-item-2"
+        role="option"
+      >
+        Bob
+      </li>
+      <li
+        aria-selected="false"
+        id="foobar-option-item-3"
+        role="option"
+      >
+        Charlie
+      </li>
+      <li
+        aria-selected="false"
+        id="foobar-option-item-4"
+        role="option"
+      >
+        Alice Doe
+      </li>
+    </ul>
+  </div>
+</div>
+`;
