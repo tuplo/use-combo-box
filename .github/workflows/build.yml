@@ -21,3 +21,25 @@ jobs:
           yarn lint
           yarn lint:ts
           yarn test:ci
+
+  test-coverage:
+    needs: test
+    name: test-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18
+      - uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      - run: |
+          yarn install --frozen-lockfile
+      - uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: yarn coverage
+          debug: true
