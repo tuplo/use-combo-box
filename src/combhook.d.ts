@@ -72,3 +72,16 @@ export interface UseComboBoxArgs<T> {
 	onSelectedItemChange: (item: T) => void;
 	placeholder?: string;
 }
+
+export interface UseComboBoxReturns<T> {
+	closeMenu: () => void;
+	getComboBoxProps: GetComboBoxProps;
+	getInputProps: GetInputProps;
+	getItemProps: GetItemProps<T>;
+	getLabelProps: GetLabelProps;
+	getMenuProps: GetMenuProps;
+	getToggleButtonProps: GetToggleButtonProps;
+	highlightedIndex: number;
+	isOpen: boolean;
+	items: T[];
+}

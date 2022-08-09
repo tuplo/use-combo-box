@@ -10,6 +10,7 @@ import type {
 	GetMenuProps,
 	GetToggleButtonProps,
 	UseComboBoxArgs,
+	UseComboBoxReturns,
 } from './combhook.d';
 import { getActiveItemId, getArgs, getItemId } from './helpers';
 
@@ -22,9 +23,12 @@ export type {
 	GetMenuProps,
 	GetToggleButtonProps,
 	UseComboBoxArgs,
+	UseComboBoxReturns,
 };
 
-export function useComboBox<T>(userArgs: UseComboBoxArgs<T>) {
+export function useComboBox<T>(
+	userArgs: UseComboBoxArgs<T>
+): UseComboBoxReturns<T> {
 	const args = getArgs(userArgs);
 	const {
 		items: initialItems,
@@ -136,14 +140,15 @@ export function useComboBox<T>(userArgs: UseComboBoxArgs<T>) {
 	});
 
 	return {
-		getLabelProps,
+		closeMenu,
 		getComboBoxProps,
 		getInputProps,
 		getItemProps,
+		getLabelProps,
 		getMenuProps,
 		getToggleButtonProps,
-		items,
+		highlightedIndex,
 		isOpen,
-		closeMenu,
+		items,
 	};
 }
