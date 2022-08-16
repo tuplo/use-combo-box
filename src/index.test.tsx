@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable jest/max-expects */
 import { act, render, screen } from '@testing-library/react';
-import user from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 
 import { useComboBox } from '.';
 import type { FilterFn, UseComboBoxArgs } from './combhook.d';
@@ -23,6 +23,8 @@ const defaultProps: UseComboBoxArgs<ItemType> = {
 };
 
 describe('useComboBox', () => {
+	const user = userEvent.setup();
+
 	it('renders', () => {
 		const { container } = render(<Component {...defaultProps} />);
 
