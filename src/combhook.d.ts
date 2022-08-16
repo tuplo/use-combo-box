@@ -17,14 +17,13 @@ export type GetLabelPropsReturns = {
 export type GetLabelProps = () => GetLabelPropsReturns;
 
 export type GetComboBoxPropsReturns = {
-	'aria-expanded': boolean;
-	'aria-haspopup': 'listbox';
-	'aria-owns': string;
-	role: 'combobox';
+	role: 'group';
 };
 export type GetComboBoxProps = () => GetComboBoxPropsReturns;
 
 export type GetToggleButtonPropsReturns = {
+	'aria-controls': string;
+	'aria-expanded': boolean;
 	id: string;
 	tabIndex: number;
 	type: 'button';
@@ -35,12 +34,14 @@ export type GetInputPropsReturns = {
 	'aria-activedescendant'?: string;
 	'aria-autocomplete': 'list';
 	'aria-controls': string;
+	'aria-expanded': boolean;
+	'aria-haspopup': 'listbox';
 	'aria-labelledby': string;
 	autoComplete: 'off';
 	onChange: (ev: ChangeEvent<HTMLInputElement>) => void;
 	onKeyDown: (ev: KeyboardEvent<HTMLInputElement>) => void;
 	placeholder?: string;
-	role: 'textbox';
+	role: 'combobox';
 	value?: string;
 };
 export type GetInputProps = () => GetInputPropsReturns;

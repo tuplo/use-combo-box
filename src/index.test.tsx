@@ -65,7 +65,7 @@ describe('useComboBox', () => {
 		it('filters out an item per keyword typed by user', async () => {
 			render(<Component {...defaultProps} />);
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Alice');
+				await user.type(screen.getByRole('combobox'), 'Alice');
 			});
 
 			expect(screen.queryAllByRole('option')).toHaveLength(2);
@@ -79,7 +79,7 @@ describe('useComboBox', () => {
 			];
 			render(<Component {...defaultProps} filterFn={customFilter} />);
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Alice');
+				await user.type(screen.getByRole('combobox'), 'Alice');
 			});
 
 			expect(screen.queryAllByRole('option')).toHaveLength(3);
@@ -98,7 +98,7 @@ describe('useComboBox', () => {
 			);
 
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Alice');
+				await user.type(screen.getByRole('combobox'), 'Alice');
 			});
 
 			expect(onInputValueChangeSpy).toHaveBeenCalledTimes(5);
@@ -109,16 +109,16 @@ describe('useComboBox', () => {
 			render(<Component {...defaultProps} />);
 
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Al');
+				await user.type(screen.getByRole('combobox'), 'Al');
 			});
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			for await (const i of [1, 2]) {
 				await act(async () => {
-					await user.type(screen.getByRole('textbox'), '{Backspace}');
+					await user.type(screen.getByRole('combobox'), '{Backspace}');
 				});
 			}
 
-			expect(screen.getByRole('textbox')).toHaveValue('');
+			expect(screen.getByRole('combobox')).toHaveValue('');
 			expect(screen.queryAllByRole('option')).toHaveLength(4);
 		});
 	});
@@ -151,7 +151,7 @@ describe('useComboBox', () => {
 			);
 
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Alice{enter}');
+				await user.type(screen.getByRole('combobox'), 'Alice{enter}');
 			});
 
 			const expected = { id: 'item-1', label: 'Alice' };
@@ -171,12 +171,12 @@ describe('useComboBox', () => {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			for await (const i of [1, 2]) {
 				await act(async () => {
-					await user.type(screen.getByRole('textbox'), '{ArrowDown}');
+					await user.type(screen.getByRole('combobox'), '{ArrowDown}');
 				});
 			}
 
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), '{Enter}');
+				await user.type(screen.getByRole('combobox'), '{Enter}');
 			});
 
 			const expected = { id: 'item-2', label: 'Bob' };
@@ -192,14 +192,14 @@ describe('useComboBox', () => {
 
 			for await (const i of [1, 2, 3, 4]) {
 				await act(async () => {
-					await user.type(screen.getByRole('textbox'), '{ArrowDown}');
+					await user.type(screen.getByRole('combobox'), '{ArrowDown}');
 				});
 				expect(options[i - 1]).toHaveAttribute('aria-selected', 'true');
 			}
 
 			for await (const i of [3, 2, 1]) {
 				await act(async () => {
-					await user.type(screen.getByRole('textbox'), '{ArrowUp}');
+					await user.type(screen.getByRole('combobox'), '{ArrowUp}');
 				});
 				expect(options[i - 1]).toHaveAttribute('aria-selected', 'true');
 			}
@@ -210,13 +210,13 @@ describe('useComboBox', () => {
 			const options = screen.queryAllByRole('option');
 			for await (const i of [1, 2, 3, 4]) {
 				await act(async () => {
-					await user.type(screen.getByRole('textbox'), '{ArrowDown}');
+					await user.type(screen.getByRole('combobox'), '{ArrowDown}');
 				});
 				expect(options[i - 1]).toHaveAttribute('aria-selected', 'true');
 			}
 
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), '{ArrowDown}');
+				await user.type(screen.getByRole('combobox'), '{ArrowDown}');
 			});
 			expect(options[0]).toHaveAttribute('aria-selected', 'true');
 		});
@@ -230,12 +230,12 @@ describe('useComboBox', () => {
 				/>
 			);
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), 'Alice{Escape}');
+				await user.type(screen.getByRole('combobox'), 'Alice{Escape}');
 			});
 
 			const options = screen.queryAllByRole('option');
 			expect(options).toHaveLength(4);
-			const input = screen.getByRole('textbox');
+			const input = screen.getByRole('combobox');
 			expect(input).toHaveValue('');
 			expect(input).not.toHaveAttribute('aria-activedescendant');
 			expect(onInputValueChangeSpy).toHaveBeenCalledWith(undefined);
@@ -248,23 +248,23 @@ describe('useComboBox', () => {
 
 			const label = screen.getByText('Choose');
 			expect(label).toHaveAttribute('id', 'foobar-label');
-			expect(label).toHaveAttribute('for', 'foobar-input');
+			expect(label).toHaveAttribute('for', 'foobar-combobox');
 		});
 
 		it('combo box', () => {
 			render(<Component {...defaultProps} />);
 
 			const comboBox = screen.getByRole('combobox');
+			expect(comboBox).toHaveAttribute('aria-controls', 'foobar-menu');
 			expect(comboBox).toHaveAttribute('aria-expanded', 'false');
-			expect(comboBox).toHaveAttribute('aria-owns', 'foobar-menu');
 			expect(comboBox).toHaveAttribute('aria-haspopup', 'listbox');
 		});
 
 		it('input', () => {
 			render(<Component {...defaultProps} />);
 
-			const input = screen.getByRole('textbox');
-			expect(input).toHaveAttribute('id', 'foobar-input');
+			const input = screen.getByRole('combobox');
+			expect(input).toHaveAttribute('id', 'foobar-combobox');
 			expect(input).toHaveAttribute('aria-autocomplete', 'list');
 			expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
 			expect(input).toHaveAttribute('aria-labelledby', 'foobar-label');
@@ -300,7 +300,7 @@ describe('useComboBox', () => {
 		it('selected item', async () => {
 			render(<Component {...defaultProps} />);
 
-			const input = screen.getByRole('textbox');
+			const input = screen.getByRole('combobox');
 			await act(async () => {
 				await user.type(input, '{ArrowDown}');
 			});

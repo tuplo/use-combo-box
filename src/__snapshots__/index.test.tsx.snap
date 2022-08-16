@@ -4,27 +4,28 @@ exports[`useComboBox renders 1`] = `
 <div>
   <div>
     <label
-      for="foobar-input"
+      for="foobar-combobox"
       id="foobar-label"
     >
       Choose
     </label>
     <div
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      aria-owns="foobar-menu"
-      role="combobox"
+      role="group"
     >
       <input
         aria-autocomplete="list"
         aria-controls="foobar-menu"
+        aria-expanded="false"
+        aria-haspopup="listbox"
         aria-labelledby="foobar-label"
         autocomplete="off"
-        id="foobar-input"
-        role="textbox"
+        id="foobar-combobox"
+        role="combobox"
         value=""
       />
       <button
+        aria-controls="foobar-menu"
+        aria-expanded="false"
         id="foobar-toggle-button"
         tabindex="-1"
         type="button"

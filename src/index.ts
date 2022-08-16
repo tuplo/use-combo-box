@@ -76,17 +76,16 @@ export function useComboBox<T>(
 
 	const getLabelProps: GetLabelProps = () => ({
 		id: `${args.id}-label`,
-		htmlFor: `${args.id}-input`,
+		htmlFor: `${args.id}-combobox`,
 	});
 
 	const getComboBoxProps: GetComboBoxProps = () => ({
-		'aria-expanded': isOpen,
-		'aria-haspopup': 'listbox',
-		'aria-owns': `${args.id}-menu`,
-		role: 'combobox',
+		role: 'group',
 	});
 
 	const getToggleButtonProps: GetToggleButtonProps = () => ({
+		'aria-controls': `${args.id}-menu`,
+		'aria-expanded': isOpen,
 		id: `${args.id}-toggle-button`,
 		tabIndex: -1,
 		type: 'button',
@@ -96,9 +95,11 @@ export function useComboBox<T>(
 		'aria-activedescendant': getActiveItemId(highlightedIndex, items, args),
 		'aria-autocomplete': 'list',
 		'aria-controls': `${args.id}-menu`,
+		'aria-expanded': isOpen,
+		'aria-haspopup': 'listbox',
 		'aria-labelledby': `${args.id}-label`,
 		autoComplete: 'off',
-		id: `${args.id}-input`,
+		id: `${args.id}-combobox`,
 		onChange: onInputValueChange,
 		onKeyDown: (ev: KeyboardEvent<HTMLInputElement>) => {
 			if (/ArrowDown|ArrowUp/.test(ev.key)) {
@@ -119,7 +120,7 @@ export function useComboBox<T>(
 			}
 		},
 		placeholder,
-		role: 'textbox',
+		role: 'combobox',
 		value: keyword || '',
 	});
 
