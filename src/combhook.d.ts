@@ -24,6 +24,8 @@ export type GetComboBoxProps = () => GetComboBoxPropsReturns;
 export type GetToggleButtonPropsReturns = {
 	'aria-controls': string;
 	'aria-expanded': boolean;
+	'aria-label'?: string;
+	'aria-labelledby'?: string;
 	id: string;
 	tabIndex: number;
 	type: 'button';
@@ -36,7 +38,8 @@ export type GetInputPropsReturns = {
 	'aria-controls': string;
 	'aria-expanded': boolean;
 	'aria-haspopup': 'listbox';
-	'aria-labelledby': string;
+	'aria-label'?: string;
+	'aria-labelledby'?: string;
 	autoComplete: 'off';
 	onChange: (ev: ChangeEvent<HTMLInputElement>) => void;
 	onKeyDown: (ev: KeyboardEvent<HTMLInputElement>) => void;
@@ -47,7 +50,8 @@ export type GetInputPropsReturns = {
 export type GetInputProps = () => GetInputPropsReturns;
 
 export type GetMenuPropsReturns = {
-	'aria-labelledby': string;
+	'aria-label'?: string;
+	'aria-labelledby'?: string;
 	id: string;
 	role: 'listbox';
 };
@@ -69,6 +73,7 @@ export interface UseComboBoxArgs<T> {
 	id: string;
 	items?: T[];
 	itemToString?: ItemToStringFn<T>;
+	label?: string;
 	onInputValueChange?: (value?: string) => void;
 	onSelectedItemChange: (item: T) => void;
 	placeholder?: string;

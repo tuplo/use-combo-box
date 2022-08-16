@@ -123,6 +123,24 @@ describe('useComboBox', () => {
 		});
 	});
 
+	describe('label', () => {
+		it('button uses propped label instead of aria-labelledby', () => {
+			render(<Component {...defaultProps} label="foobar" />);
+
+			const input = screen.getByRole('button');
+			expect(input).toHaveAttribute('aria-label', 'foobar');
+			expect(input).not.toHaveAttribute('aria-labelledby');
+		});
+
+		it('menu uses propped label instead of aria-labelledby', () => {
+			render(<Component {...defaultProps} label="foobar" />);
+
+			const input = screen.getByRole('listbox');
+			expect(input).toHaveAttribute('aria-label', 'foobar');
+			expect(input).not.toHaveAttribute('aria-labelledby');
+		});
+	});
+
 	describe('onSelectedItemChange', () => {
 		it('calls handler when user picks an item (by clicking)', async () => {
 			const onSelectedItemChangeSpy = jest.fn();
@@ -267,7 +285,6 @@ describe('useComboBox', () => {
 			expect(input).toHaveAttribute('id', 'foobar-combobox');
 			expect(input).toHaveAttribute('aria-autocomplete', 'list');
 			expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
-			expect(input).toHaveAttribute('aria-labelledby', 'foobar-label');
 			expect(input).toHaveAttribute('autocomplete', 'off');
 			expect(input).not.toHaveAttribute('aria-activedescendant');
 		});

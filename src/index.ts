@@ -31,11 +31,12 @@ export function useComboBox<T>(
 ): UseComboBoxReturns<T> {
 	const args = getArgs(userArgs);
 	const {
+		filterFn,
 		items: initialItems,
-		placeholder,
+		label,
 		onInputValueChange: customOnInputValueChange,
 		onSelectedItemChange,
-		filterFn,
+		placeholder,
 	} = args;
 	const [keyword, setKeyword] = useState<string>();
 	const [items, setItems] = useState<T[]>(initialItems);
@@ -86,6 +87,8 @@ export function useComboBox<T>(
 	const getToggleButtonProps: GetToggleButtonProps = () => ({
 		'aria-controls': `${args.id}-menu`,
 		'aria-expanded': isOpen,
+		'aria-labelledby': label ? undefined : `${args.id}-label`,
+		'aria-label': label,
 		id: `${args.id}-toggle-button`,
 		tabIndex: -1,
 		type: 'button',
@@ -97,7 +100,6 @@ export function useComboBox<T>(
 		'aria-controls': `${args.id}-menu`,
 		'aria-expanded': isOpen,
 		'aria-haspopup': 'listbox',
-		'aria-labelledby': `${args.id}-label`,
 		autoComplete: 'off',
 		id: `${args.id}-combobox`,
 		onChange: onInputValueChange,
@@ -125,7 +127,8 @@ export function useComboBox<T>(
 	});
 
 	const getMenuProps: GetMenuProps = () => ({
-		'aria-labelledby': `${args.id}-label`,
+		'aria-labelledby': label ? undefined : `${args.id}-label`,
+		'aria-label': label,
 		id: `${args.id}-menu`,
 		role: 'listbox',
 	});
