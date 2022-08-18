@@ -17,6 +17,7 @@ exports[`useComboBox renders 1`] = `
         aria-controls="foobar-menu"
         aria-expanded="false"
         aria-haspopup="listbox"
+        aria-labelledby="foobar-label"
         autocomplete="off"
         id="foobar-combobox"
         role="combobox"

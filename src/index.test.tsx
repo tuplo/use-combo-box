@@ -278,15 +278,38 @@ describe('useComboBox', () => {
 			expect(comboBox).toHaveAttribute('aria-haspopup', 'listbox');
 		});
 
-		it('input', () => {
-			render(<Component {...defaultProps} />);
+		describe('input', () => {
+			it('default props', () => {
+				render(<Component {...defaultProps} />);
 
-			const input = screen.getByRole('combobox');
-			expect(input).toHaveAttribute('id', 'foobar-combobox');
-			expect(input).toHaveAttribute('aria-autocomplete', 'list');
-			expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
-			expect(input).toHaveAttribute('autocomplete', 'off');
-			expect(input).not.toHaveAttribute('aria-activedescendant');
+				const input = screen.getByRole('combobox');
+				expect(input).toHaveAttribute('id', 'foobar-combobox');
+				expect(input).toHaveAttribute('aria-autocomplete', 'list');
+				expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
+				expect(input).toHaveAttribute('autocomplete', 'off');
+				expect(input).not.toHaveAttribute('aria-activedescendant');
+			});
+
+			it('when no placeholder/label, expects a visible element', () => {
+				render(<Component {...defaultProps} />);
+
+				const input = screen.getByRole('combobox');
+				expect(input).toHaveAttribute('aria-labelledby', 'foobar-label');
+			});
+
+			it('with explicit placeholder', () => {
+				render(<Component {...defaultProps} label="Foobar placeholder" />);
+
+				const input = screen.getByRole('combobox');
+				expect(input).toHaveAccessibleName('Foobar placeholder');
+			});
+
+			it('with explicit label', () => {
+				render(<Component {...defaultProps} label="Foobar label" />);
+
+				const input = screen.getByRole('combobox');
+				expect(input).toHaveAccessibleName('Foobar label');
+			});
 		});
 
 		it('button', () => {

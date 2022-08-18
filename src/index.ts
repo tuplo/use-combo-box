@@ -100,6 +100,8 @@ export function useComboBox<T>(
 		'aria-controls': `${args.id}-menu`,
 		'aria-expanded': isOpen,
 		'aria-haspopup': 'listbox',
+		'aria-label': label || placeholder,
+		'aria-labelledby': label || placeholder ? undefined : `${args.id}-label`,
 		autoComplete: 'off',
 		id: `${args.id}-combobox`,
 		onChange: onInputValueChange,
