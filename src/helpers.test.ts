@@ -1,10 +1,11 @@
+import type { UseComboBoxArgs } from './combhook.d';
 import {
 	defaultFilterFn,
-	getItemId,
 	getActiveItemId,
 	getArgs,
+	getItemId,
+	slugify,
 } from './helpers';
-import type { UseComboBoxArgs } from './combhook.d';
 
 describe('useComboBox: helpers', () => {
 	describe('defaultFilterFn', () => {
@@ -22,7 +23,7 @@ describe('useComboBox: helpers', () => {
 
 	describe('getItemId', () => {
 		it.each([
-			['default', undefined, 'id-option-{"id":"foobar","label":"label"}'],
+			['default', undefined, 'id-option-id-foobar-label-label'],
 			[
 				'custom itemToString',
 				(item: { label: string }) => item.label,
@@ -32,7 +33,7 @@ describe('useComboBox: helpers', () => {
 				'no id',
 				// @ts-expect-error item doesn't have foo property
 				(item) => item.foo,
-				'id-option-{"id":"foobar","label":"label"}',
+				'id-option-id-foobar-label-label',
 			],
 		])('getItemId: %s', (_, itemToString, expected) => {
 			const args = { id: 'id', onSelectedItemChange: jest.fn(), itemToString };
@@ -78,6 +79,19 @@ describe('useComboBox: helpers', () => {
 			const actual = args.itemToString(items[index]);
 
 			expect(actual).toBe(expected);
+		});
+	});
+
+	describe('slugify', () => {
+		it.each([
+			['Hello World', 'hello-world'],
+			[
+				'{"link":"/venue/arthouse-crouch-end","label":"ArtHouse Crouch End"}',
+				'link-venue-arthouse-crouch-end-label-arthouse-crouch-end',
+			],
+		])('builds slug: %s', (str, expected) => {
+			const actual = slugify(str);
+			expect(actual).toStrictEqual(expected);
 		});
 	});
 });

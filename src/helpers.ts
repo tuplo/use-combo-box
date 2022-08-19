@@ -1,5 +1,13 @@
 import type { FilterFn, ItemToStringFn, UseComboBoxArgs } from './combhook.d';
 
+export function slugify(str: string): string {
+	return str
+		.toLowerCase()
+		.replace(/[^a-z0-9]/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-|-$/g, '');
+}
+
 export const defaultFilterFn: FilterFn<unknown> = async (
 	keyword,
 	items = []
@@ -15,7 +23,8 @@ export function getItemId<T>(item: T, args: UseComboBoxArgs<T>) {
 	if (itemToString) {
 		itemKey = itemToString(item);
 	}
-	itemKey = itemKey || JSON.stringify(item);
+	itemKey = slugify(itemKey || JSON.stringify(item));
+
 	return `${id}-option-${itemKey}`;
 }
 

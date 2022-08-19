@@ -56,7 +56,7 @@ describe('useComboBox', () => {
 			const [firstOption] = screen.queryAllByRole('option');
 			expect(firstOption).toHaveAttribute(
 				'id',
-				'foobar-option-{"id":"item-1","label":"Alice"}'
+				'foobar-option-id-item-1-label-alice'
 			);
 		});
 	});
