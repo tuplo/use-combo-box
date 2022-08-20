@@ -85,19 +85,23 @@ export function useComboBox<T>(
 	});
 
 	const getToggleButtonProps: GetToggleButtonProps = () => ({
-		'aria-controls': `${args.id}-menu`,
+		'aria-controls': isOpen ? `${args.id}-menu` : undefined,
 		'aria-expanded': isOpen,
 		'aria-labelledby': label ? undefined : `${args.id}-label`,
 		'aria-label': label,
 		id: `${args.id}-toggle-button`,
 		tabIndex: -1,
 		type: 'button',
+		onClick: (event: MouseEvent) => {
+			event.preventDefault();
+			setIsOpen(!isOpen);
+		},
 	});
 
 	const getInputProps: GetInputProps = () => ({
 		'aria-activedescendant': getActiveItemId(highlightedIndex, items, args),
 		'aria-autocomplete': 'list',
-		'aria-controls': `${args.id}-menu`,
+		'aria-controls': isOpen ? `${args.id}-menu` : undefined,
 		'aria-expanded': isOpen,
 		'aria-haspopup': 'listbox',
 		'aria-label': label || placeholder,

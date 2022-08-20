@@ -13,12 +13,12 @@
 
 ## Why
 
-We used `downshift` but it was too heavy for our needs.
+We tried `downshift` but it was too heavy for our needs.
 
-* No dependencies
-* Tiny footprint (2.3K)
-* WAI-ARIA compliant
-* Keyboard navigation	 
+- No dependencies
+- Tiny footprint (2.3K)
+- WAI-ARIA compliant, implements the [Combobox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
+- Keyboard navigation
 
 ## Install
 
@@ -34,7 +34,7 @@ $ yarn add @tuplo/combhook
 Minimal example
 
 ```jsx
-import { useComboBox } from '@tuplo/combhook'
+import { useComboBox } from '@tuplo/combhook';
 
 function ComboBox() {
   const {
@@ -47,7 +47,7 @@ function ComboBox() {
     items,
   } = useComboBox({
     id: 'my-combo-box',
-    onSelectedItemChange: (item) => console.log(item)
+    onSelectedItemChange: (item) => console.log(item),
   });
 
   return (
@@ -73,15 +73,26 @@ function ComboBox() {
 
 ```typescript
 const comboBoxProps = useComboBox({
+  filterFn: async (keyword, items) =>
+    items.filter((item) => item.label.includes(keyword)),
   id: 'my-combo-box',
-  items: [{ id: 1, label: 'Alice' }, { id: 2, label: 'Bob' }],
   itemToString: (item) => item.id,
-  filterFn: async (keyword, items) => items.filter(item => item.label.includes(keyword)),
+  items: [
+    { id: 1, label: 'Alice' },
+    { id: 2, label: 'Bob' },
+  ],
+  label: "Team members",
   onInputValueChange: (value) => console.log(value),
   onSelectedItemChange: (item) => console.log(item),
-  placeholder: 'Choose name',
+  placeholder: 'Choose team member',
 });
 ```
+
+### filterFn
+
+> `(keyword: string, items: ItemType[]) => Promise<ItemType[]>` | optional
+
+A custom function to be called when filtering the list of items according to the keyword typed in by the user.
 
 ### id
 
@@ -89,23 +100,23 @@ const comboBoxProps = useComboBox({
 
 Unique identifier for this widget. It's used to build IDs for all child elements.
 
-### items
-
-> `ItemType[]` | optional
-
-List of initial items to show on menu. When empty, the list is populated by the return value of `filterFn`.
-
 ### itemToString
 
 > `(item: ItemType) => string` | defaults to `JSON.stringify(item)`
 
 If your items are stored as objects, this function is used to create unique IDs for each option.
 
-### filterFn
+### items
 
-> `(keyword: string, items: ItemType[]) => Promise<ItemType[]>` | optional
+> `ItemType[]` | optional
 
-A custom function to be called when filtering the list of items according to the keyword typed in by the user.
+List of initial items to show on menu. When empty, the list is populated by the return value of `filterFn`.
+
+### label
+
+> `string` | optional
+
+Explicit value to be used on `aria-label`.
 
 ### onInputValueChange
 

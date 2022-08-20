@@ -1,5 +1,4 @@
 /* eslint-disable no-use-before-define */
-/* eslint-disable jest/max-expects */
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -269,15 +268,6 @@ describe('useComboBox', () => {
 			expect(label).toHaveAttribute('for', 'foobar-combobox');
 		});
 
-		it('combo box', () => {
-			render(<Component {...defaultProps} />);
-
-			const comboBox = screen.getByRole('combobox');
-			expect(comboBox).toHaveAttribute('aria-controls', 'foobar-menu');
-			expect(comboBox).toHaveAttribute('aria-expanded', 'false');
-			expect(comboBox).toHaveAttribute('aria-haspopup', 'listbox');
-		});
-
 		describe('input', () => {
 			it('default props', () => {
 				render(<Component {...defaultProps} />);
@@ -285,7 +275,6 @@ describe('useComboBox', () => {
 				const input = screen.getByRole('combobox');
 				expect(input).toHaveAttribute('id', 'foobar-combobox');
 				expect(input).toHaveAttribute('aria-autocomplete', 'list');
-				expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
 				expect(input).toHaveAttribute('autocomplete', 'off');
 				expect(input).not.toHaveAttribute('aria-activedescendant');
 			});
@@ -309,6 +298,19 @@ describe('useComboBox', () => {
 
 				const input = screen.getByRole('combobox');
 				expect(input).toHaveAccessibleName('Foobar label');
+			});
+
+			it("when the menu is open there's a aria-controls", async () => {
+				render(<Component {...defaultProps} />);
+
+				await act(async () => {
+					await user.click(screen.getByRole('button'));
+				});
+
+				const input = screen.getByRole('combobox');
+				expect(input).toHaveAttribute('aria-controls', 'foobar-menu');
+				const button = screen.getByRole('button');
+				expect(button).toHaveAttribute('aria-controls', 'foobar-menu');
 			});
 		});
 

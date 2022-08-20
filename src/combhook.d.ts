@@ -22,7 +22,7 @@ export type GetComboBoxPropsReturns = {
 export type GetComboBoxProps = () => GetComboBoxPropsReturns;
 
 export type GetToggleButtonPropsReturns = {
-	'aria-controls': string;
+	'aria-controls'?: string;
 	'aria-expanded': boolean;
 	'aria-label'?: string;
 	'aria-labelledby'?: string;
@@ -35,7 +35,7 @@ export type GetToggleButtonProps = () => GetToggleButtonPropsReturns;
 export type GetInputPropsReturns = {
 	'aria-activedescendant'?: string;
 	'aria-autocomplete': 'list';
-	'aria-controls': string;
+	'aria-controls'?: string;
 	'aria-expanded': boolean;
 	'aria-haspopup': 'listbox';
 	'aria-label'?: string;
