@@ -1,25 +1,29 @@
-import type { FilterFn, ItemToStringFn, UseComboBoxArgs } from './combhook.d';
+import type {
+	IFilterFn,
+	IItemToStringFn,
+	IUseComboBoxArgs,
+} from "./use-combo-box";
 
 export function slugify(str: string): string {
 	return str
 		.toLowerCase()
-		.replace(/[^a-z0-9]/g, '-')
-		.replace(/-+/g, '-')
-		.replace(/^-|-$/g, '');
+		.replace(/[^a-z0-9]/g, "-")
+		.replace(/-+/g, "-")
+		.replace(/^-|-$/g, "");
 }
 
-export const defaultFilterFn: FilterFn<unknown> = async (
+export const defaultFilterFn: IFilterFn<unknown> = async (
 	keyword,
 	items = []
 ) => {
-	const rg = new RegExp(keyword, 'i');
+	const rg = new RegExp(keyword, "i");
 	// eslint-disable-next-line dot-notation
 	return items.filter((item) => item && rg.test(String(item)));
 };
 
-export function getItemId<T>(item: T, args: UseComboBoxArgs<T>) {
+export function getItemId<T>(item: T, args: IUseComboBoxArgs<T>) {
 	const { id, itemToString } = args;
-	let itemKey = '';
+	let itemKey = "";
 	if (itemToString) {
 		itemKey = itemToString(item);
 	}
@@ -31,7 +35,7 @@ export function getItemId<T>(item: T, args: UseComboBoxArgs<T>) {
 export function getActiveItemId<T>(
 	highlightedIndex: number,
 	items: T[],
-	args: UseComboBoxArgs<T>
+	args: IUseComboBoxArgs<T>
 ) {
 	const activeItem = items[highlightedIndex];
 	if (!activeItem) return undefined;
@@ -39,20 +43,20 @@ export function getActiveItemId<T>(
 }
 
 interface GetArgsReturns<T>
-	extends Omit<UseComboBoxArgs<T>, 'itemToString' | 'items' | 'filterFn'> {
-	itemToString: ItemToStringFn<T>;
+	extends Omit<IUseComboBoxArgs<T>, "itemToString" | "items" | "filterFn"> {
+	itemToString: IItemToStringFn<T>;
 	items: T[];
-	filterFn: FilterFn<T>;
+	filterFn: IFilterFn<T>;
 }
 
-export function getArgs<T>(userArgs: UseComboBoxArgs<T>): GetArgsReturns<T> {
-	const defaultItemToString: ItemToStringFn<T> = (item) =>
-		item ? JSON.stringify(item) : '';
+export function getArgs<T>(userArgs: IUseComboBoxArgs<T>): GetArgsReturns<T> {
+	const defaultItemToString: IItemToStringFn<T> = (item) =>
+		item ? JSON.stringify(item) : "";
 
 	const {
 		itemToString = defaultItemToString,
 		items = [],
-		filterFn = defaultFilterFn as FilterFn<T>,
+		filterFn = defaultFilterFn as IFilterFn<T>,
 	} = userArgs;
 
 	return { ...userArgs, filterFn, items, itemToString };

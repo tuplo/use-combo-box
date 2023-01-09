@@ -1,58 +1,58 @@
-import type { UseComboBoxArgs } from './combhook.d';
 import {
 	defaultFilterFn,
 	getActiveItemId,
 	getArgs,
 	getItemId,
 	slugify,
-} from './helpers';
+} from "./helpers";
+import type { IUseComboBoxArgs } from "./use-combo-box";
 
-describe('useComboBox: helpers', () => {
-	describe('defaultFilterFn', () => {
+describe("useComboBox: helpers", () => {
+	describe("defaultFilterFn", () => {
 		it.each([
-			['with items', ['foo', 'bar', 'foobar'], ['foo', 'foobar']],
-			['no items', undefined, []],
-			['handles falsy item', ['foo', null, 'bar'], ['foo']],
-		])('defaults filter: %s', async (_, items, expected) => {
+			["with items", ["foo", "bar", "foobar"], ["foo", "foobar"]],
+			["no items", undefined, []],
+			["handles falsy item", ["foo", null, "bar"], ["foo"]],
+		])("defaults filter: %s", async (_, items, expected) => {
 			const filter = defaultFilterFn;
-			const actual = await filter('foo', items);
+			const actual = await filter("foo", items);
 
 			expect(actual).toStrictEqual(expected);
 		});
 	});
 
-	describe('getItemId', () => {
+	describe("getItemId", () => {
 		it.each([
-			['default', undefined, 'id-option-id-foobar-label-label'],
+			["default", undefined, "id-option-id-foobar-label-label"],
 			[
-				'custom itemToString',
+				"custom itemToString",
 				(item: { label: string }) => item.label,
-				'id-option-label',
+				"id-option-label",
 			],
 			[
-				'no id',
+				"no id",
 				// @ts-expect-error item doesn't have foo property
 				(item) => item.foo,
-				'id-option-id-foobar-label-label',
+				"id-option-id-foobar-label-label",
 			],
-		])('getItemId: %s', (_, itemToString, expected) => {
-			const args = { id: 'id', onSelectedItemChange: jest.fn(), itemToString };
-			const actual = getItemId({ id: 'foobar', label: 'label' }, args);
+		])("getItemId: %s", (_, itemToString, expected) => {
+			const args = { id: "id", onSelectedItemChange: jest.fn(), itemToString };
+			const actual = getItemId({ id: "foobar", label: "label" }, args);
 
 			expect(actual).toBe(expected);
 		});
 	});
 
-	describe('getActiveItemId', () => {
+	describe("getActiveItemId", () => {
 		it.each([
-			['first item selected', 1, 'foobar-option-667'],
-			['no item selected', -1, undefined],
-			['bad index', 2, undefined],
-		])('getActiveItemId: %s', (_, highlightedIndex, expected) => {
+			["first item selected", 1, "foobar-option-667"],
+			["no item selected", -1, undefined],
+			["bad index", 2, undefined],
+		])("getActiveItemId: %s", (_, highlightedIndex, expected) => {
 			const items = [{ id: 666 }, { id: 667 }];
 			type ItemType = { id: number };
-			const args: UseComboBoxArgs<ItemType> = {
-				id: 'foobar',
+			const args: IUseComboBoxArgs<ItemType> = {
+				id: "foobar",
 				onSelectedItemChange: jest.fn(),
 				itemToString: (item) => String(item.id),
 			};
@@ -62,16 +62,16 @@ describe('useComboBox: helpers', () => {
 		});
 	});
 
-	describe('getArgs', () => {
+	describe("getArgs", () => {
 		type ItemType = { id: number } | undefined;
 		const items = [{ id: 666 }, undefined, { id: 667 }];
 
 		it.each([
-			['default', 0, '{"id":666}'],
-			['falsy item', 1, ''],
-		])('itemToString: %s', (_, index, expected) => {
-			const userArgs: UseComboBoxArgs<ItemType> = {
-				id: 'foobar',
+			["default", 0, '{"id":666}'],
+			["falsy item", 1, ""],
+		])("itemToString: %s", (_, index, expected) => {
+			const userArgs: IUseComboBoxArgs<ItemType> = {
+				id: "foobar",
 				onSelectedItemChange: jest.fn(),
 				items,
 			};
@@ -82,14 +82,14 @@ describe('useComboBox: helpers', () => {
 		});
 	});
 
-	describe('slugify', () => {
+	describe("slugify", () => {
 		it.each([
-			['Hello World', 'hello-world'],
+			["Hello World", "hello-world"],
 			[
 				'{"link":"/venue/arthouse-crouch-end","label":"ArtHouse Crouch End"}',
-				'link-venue-arthouse-crouch-end-label-arthouse-crouch-end',
+				"link-venue-arthouse-crouch-end-label-arthouse-crouch-end",
 			],
-		])('builds slug: %s', (str, expected) => {
+		])("builds slug: %s", (str, expected) => {
 			const actual = slugify(str);
 			expect(actual).toStrictEqual(expected);
 		});

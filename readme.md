@@ -1,13 +1,12 @@
 <br />
 <div align="center">
   <img src="logo.png" alt="Logo" width="120" height="120">
-  <h1 align="center">combhook</h3>
-  <p align="center">Headless combobox hook for React</p>
+  <h1 align="center">use-combo-box</h3>
+  <p align="center">Headless combo-box hook for React</p>
   <p align="center">
-    <img src="https://img.shields.io/npm/v/@tuplo/combhook">
-    <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/combhook">
-  	 <a href="https://codeclimate.com/github/tuplo/combhook/test_coverage"><img src="https://api.codeclimate.com/v1/badges/3960dc58d920755d77a0/test_coverage" /></a>
-  	 <img src="https://github.com/tuplo/combhook/actions/workflows/build.yml/badge.svg">
+    <img src="https://img.shields.io/npm/v/@tuplo/use-combo-box">
+    <img src="https://img.shields.io/bundlephobia/minzip/@tuplo/use-combo-box">
+  	<a href="https://codeclimate.com/github/tuplo/use-combo-box/test_coverage"><img src="https://api.codeclimate.com/v1/badges/309c1f1e7ab197b5453e/test_coverage" /></a>
   </p>
 </div>
 
@@ -23,10 +22,10 @@ We tried `downshift` but it was too heavy for our needs.
 ## Install
 
 ```bash
-$ npm install @tuplo/combhook
+$ npm install @tuplo/use-combo-box
 
 # or with yarn
-$ yarn add @tuplo/combhook
+$ yarn add @tuplo/use-combo-box
 ```
 
 ## Usage
@@ -34,7 +33,7 @@ $ yarn add @tuplo/combhook
 Minimal example
 
 ```jsx
-import { useComboBox } from '@tuplo/combhook';
+import { useComboBox } from "@tuplo/use-combo-box";
 
 function ComboBox() {
   const {
@@ -46,7 +45,7 @@ function ComboBox() {
     getToggleButtonProps,
     items,
   } = useComboBox({
-    id: 'my-combo-box',
+    id: "my-combo-box",
     onSelectedItemChange: (item) => console.log(item),
   });
 
@@ -75,16 +74,16 @@ function ComboBox() {
 const comboBoxProps = useComboBox({
   filterFn: async (keyword, items) =>
     items.filter((item) => item.label.includes(keyword)),
-  id: 'my-combo-box',
+  id: "my-combo-box",
   itemToString: (item) => item.id,
   items: [
-    { id: 1, label: 'Alice' },
-    { id: 2, label: 'Bob' },
+    { id: 1, label: "Alice" },
+    { id: 2, label: "Bob" },
   ],
   label: "Team members",
   onInputValueChange: (value) => console.log(value),
   onSelectedItemChange: (item) => console.log(item),
-  placeholder: 'Choose team member',
+  placeholder: "Choose team member",
 });
 ```
 
