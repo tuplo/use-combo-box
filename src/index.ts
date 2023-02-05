@@ -45,7 +45,7 @@ export function useComboBox<T>(
 
 	useEffect(() => {
 		setItems(initialItems);
-	}, [initialItems]);
+	}, [JSON.stringify(initialItems)]);
 
 	useEffect(() => {
 		if (!keyword) return;

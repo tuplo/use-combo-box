@@ -58,6 +58,18 @@ describe("useComboBox", () => {
 			expect(screen.getByRole("listbox")).toBeInTheDocument();
 			expect(screen.queryAllByRole("option")).toHaveLength(0);
 		});
+
+		it("handles an update to the list of items", () => {
+			const items = [{ id: "foobar", label: "buzz" }];
+			const { rerender } = render(
+				<Component {...defaultProps} items={items} />
+			);
+			expect(screen.getByText("buzz")).toBeInTheDocument();
+
+			const newItems = [{ id: "bazz", label: "quz" }];
+			rerender(<Component {...defaultProps} items={newItems} />);
+			expect(screen.getByText("quz")).toBeInTheDocument();
+		});
 	});
 
 	describe("placeholder", () => {
