@@ -2,7 +2,7 @@ import type {
 	IFilterFn,
 	IItemToStringFn,
 	IUseComboBoxArgs,
-} from "./use-combo-box";
+} from "./use-combo-box.d";
 
 export function slugify(str: string): string {
 	return str
@@ -42,14 +42,14 @@ export function getActiveItemId<T>(
 	return getItemId<T>(activeItem, args);
 }
 
-interface GetArgsReturns<T>
+interface IGetArgsReturns<T>
 	extends Omit<IUseComboBoxArgs<T>, "itemToString" | "items" | "filterFn"> {
 	itemToString: IItemToStringFn<T>;
 	items: T[];
 	filterFn: IFilterFn<T>;
 }
 
-export function getArgs<T>(userArgs: IUseComboBoxArgs<T>): GetArgsReturns<T> {
+export function getArgs<T>(userArgs: IUseComboBoxArgs<T>): IGetArgsReturns<T> {
 	const defaultItemToString: IItemToStringFn<T> = (item) =>
 		item ? JSON.stringify(item) : "";
 

@@ -3,11 +3,14 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { useComboBox } from ".";
-import type { IFilterFn, IUseComboBoxArgs } from "./use-combo-box";
+import type { IFilterFn, IUseComboBoxArgs } from "./use-combo-box.d";
 
-type ItemType = { id: string; label: string };
+interface IItem {
+	id: string;
+	label: string;
+}
 
-const defaultProps: IUseComboBoxArgs<ItemType> = {
+const defaultProps: IUseComboBoxArgs<IItem> = {
 	filterFn: async (keyword, items = []) =>
 		items.filter((item) => item.label.includes(keyword)),
 	id: "foobar",
@@ -32,8 +35,25 @@ describe("useComboBox", () => {
 	});
 
 	describe("initialItems", () => {
-		it("handles empty list of initial items", () => {
-			render(<Component {...defaultProps} items={undefined} />);
+		it("handles a list of initial items", () => {
+			const items = [{ id: "foobar", label: "buzz" }];
+			render(<Component {...defaultProps} items={items} />);
+
+			expect(screen.getByRole("listbox")).toBeInTheDocument();
+			expect(screen.queryAllByRole("option")).toHaveLength(1);
+		});
+
+		it("handles an empty list of initial items", () => {
+			const items: IItem[] = [];
+			render(<Component {...defaultProps} items={items} />);
+
+			expect(screen.getByRole("listbox")).toBeInTheDocument();
+			expect(screen.queryAllByRole("option")).toHaveLength(0);
+		});
+
+		it("handles an undefined list of initial items", () => {
+			const items: IItem[] | undefined = undefined;
+			render(<Component {...defaultProps} items={items} />);
 
 			expect(screen.getByRole("listbox")).toBeInTheDocument();
 			expect(screen.queryAllByRole("option")).toHaveLength(0);
@@ -71,7 +91,7 @@ describe("useComboBox", () => {
 		});
 
 		it("uses a custom function to filter items", async () => {
-			const customFilter: IFilterFn<ItemType> = async () => [
+			const customFilter: IFilterFn<IItem> = async () => [
 				{ id: "item-5", label: "David" },
 				{ id: "item-6", label: "Edna" },
 				{ id: "item-6", label: "Fay" },
@@ -149,10 +169,8 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
-
 			const [first] = screen.queryAllByRole("option");
 			await user.click(first);
-
 			const expected = { id: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
@@ -166,11 +184,9 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
-
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "Alice{enter}");
 			});
-
 			const expected = { id: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
@@ -184,18 +200,15 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
-
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			for await (const i of [1, 2]) {
 				await act(async () => {
 					await user.type(screen.getByRole("combobox"), "{ArrowDown}");
 				});
 			}
-
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "{Enter}");
 			});
-
 			const expected = { id: "item-2", label: "Bob" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
@@ -357,7 +370,7 @@ describe("useComboBox", () => {
 	});
 });
 
-function Component(props: IUseComboBoxArgs<ItemType>) {
+function Component(props: IUseComboBoxArgs<IItem>) {
 	const {
 		getComboBoxProps,
 		getLabelProps,

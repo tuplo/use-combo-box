@@ -32,7 +32,7 @@ export function useComboBox<T>(
 	const args = getArgs(userArgs);
 	const {
 		filterFn,
-		items: initialItems,
+		items: initialItems = [],
 		label,
 		onInputValueChange: customOnInputValueChange,
 		onSelectedItemChange,
@@ -42,6 +42,10 @@ export function useComboBox<T>(
 	const [items, setItems] = useState<T[]>(initialItems);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+
+	useEffect(() => {
+		setItems(initialItems);
+	}, [initialItems]);
 
 	useEffect(() => {
 		if (!keyword) return;
