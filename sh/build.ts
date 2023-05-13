@@ -6,7 +6,7 @@ async function main() {
 
 	const flags = ["--bundle", "--external:react"];
 
-	await $`esbuild src/index.ts --outfile=dist/index.cjs ${flags}`;
+	await $`esbuild src/index.ts --format=cjs --outfile=dist/index.cjs ${flags}`;
 	await $`esbuild src/index.ts --format=esm --outfile=dist/index.mjs ${flags}`;
 
 	await $`cp src/use-combo-box.d.ts dist/use-combo-box.d.ts`;
