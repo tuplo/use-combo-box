@@ -1,13 +1,13 @@
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
 
 export interface IItem {
-	id?: string;
+	id?: string | number;
 	label?: string;
 	[k: string]: unknown;
 }
 
-export interface IFilterFn<T> {
-	(keyword: string, items?: T[]): Promise<T[]>;
+export interface IFilterFn<T extends IItem> {
+	(keyword: string, items: T[]): Promise<T[]>;
 }
 
 export interface IItemToStringFn<T> {
@@ -86,7 +86,7 @@ export interface IGetItemProps<T> {
 	(args: IGetItemPropsArgs<T>): IGetItemPropsReturns;
 }
 
-export interface IUseComboBoxArgs<T> {
+export interface IUseComboBoxArgs<T extends IItem> {
 	filterFn?: IFilterFn<T>;
 	id: string;
 	items?: T[];

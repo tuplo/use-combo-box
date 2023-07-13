@@ -5,7 +5,7 @@ import {
 	getItemId,
 	slugify,
 } from "./helpers";
-import type { IUseComboBoxArgs } from "./use-combo-box";
+import type { IUseComboBoxArgs, IItem } from "./use-combo-box";
 
 describe("useComboBox: helpers", () => {
 	describe("defaultFilterFn", () => {
@@ -15,9 +15,11 @@ describe("useComboBox: helpers", () => {
 			["handles falsy item", ["foo", null, "bar"], ["foo"]],
 		])("defaults filter: %s", async (_, items, expected) => {
 			const filter = defaultFilterFn;
-			const actual = await filter("foo", items);
+			const labeled = items?.map((label) => ({ label })) as IItem[];
+			const actual = await filter("foo", labeled);
 
-			expect(actual).toStrictEqual(expected);
+			const labeledExpected = expected.map((label) => ({ label })) as IItem[];
+			expect(actual).toStrictEqual(labeledExpected);
 		});
 	});
 
@@ -49,9 +51,8 @@ describe("useComboBox: helpers", () => {
 			["no item selected", -1, undefined],
 			["bad index", 2, undefined],
 		])("getActiveItemId: %s", (_, highlightedIndex, expected) => {
-			const items = [{ id: 666 }, { id: 667 }];
-			type ItemType = { id: number };
-			const args: IUseComboBoxArgs<ItemType> = {
+			const items = [{ id: 666 }, { id: 667 }] as IItem[];
+			const args: IUseComboBoxArgs<IItem> = {
 				id: "foobar",
 				onSelectedItemChange: jest.fn(),
 				itemToString: (item) => String(item.id),
@@ -63,14 +64,14 @@ describe("useComboBox: helpers", () => {
 	});
 
 	describe("getArgs", () => {
-		type ItemType = { id: number } | undefined;
-		const items = [{ id: 666 }, undefined, { id: 667 }];
+		// type ItemType = IItem | undefined;
+		const items = [{ id: 666 }, undefined, { id: 667 }] as IItem[];
 
 		it.each([
 			["default", 0, '{"id":666}'],
 			["falsy item", 1, ""],
 		])("itemToString: %s", (_, index, expected) => {
-			const userArgs: IUseComboBoxArgs<ItemType> = {
+			const userArgs: IUseComboBoxArgs<IItem> = {
 				id: "foobar",
 				onSelectedItemChange: jest.fn(),
 				items,

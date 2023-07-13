@@ -3,18 +3,11 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { useComboBox } from ".";
-import type { IFilterFn, IUseComboBoxArgs } from "./use-combo-box.d";
-
-interface IItem {
-	id: string;
-	label: string;
-}
+import type { IFilterFn, IUseComboBoxArgs, IItem } from "./use-combo-box.d";
 
 const defaultProps: IUseComboBoxArgs<IItem> = {
-	filterFn: async (keyword, items = []) =>
-		items.filter((item) => item.label.includes(keyword)),
 	id: "foobar",
-	itemToString: (item) => item?.id || "",
+	itemToString: (item) => item?.id?.toString() || "",
 	onSelectedItemChange: jest.fn(),
 	items: [
 		{ id: "item-1", label: "Alice" },

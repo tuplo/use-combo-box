@@ -12,6 +12,7 @@ import type {
 	IGetToggleButtonProps,
 	IUseComboBoxArgs,
 	IUseComboBoxReturns,
+	IItem,
 } from "./use-combo-box.d";
 
 export type {
@@ -26,7 +27,7 @@ export type {
 	IUseComboBoxReturns,
 };
 
-export function useComboBox<T>(
+export function useComboBox<T extends IItem>(
 	userArgs: IUseComboBoxArgs<T>
 ): IUseComboBoxReturns<T> {
 	const args = getArgs(userArgs);
