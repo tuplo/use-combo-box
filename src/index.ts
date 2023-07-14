@@ -12,7 +12,6 @@ import type {
 	IGetToggleButtonProps,
 	IUseComboBoxArgs,
 	IUseComboBoxReturns,
-	IItem,
 } from "./use-combo-box.d";
 
 export type {
@@ -27,7 +26,7 @@ export type {
 	IUseComboBoxReturns,
 };
 
-export function useComboBox<T extends IItem>(
+export function useComboBox<T>(
 	userArgs: IUseComboBoxArgs<T>
 ): IUseComboBoxReturns<T> {
 	const args = getArgs(userArgs);
@@ -40,26 +39,32 @@ export function useComboBox<T extends IItem>(
 		placeholder,
 	} = args;
 	const [keyword, setKeyword] = useState<string>();
-	const [items, setItems] = useState<T[]>(initialItems);
+	const [filteredItems, setFilteredItems] = useState<T[]>();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
-	useEffect(() => {
-		setItems(initialItems);
-	}, [JSON.stringify(initialItems)]);
+	const items = filteredItems || initialItems;
 
 	useEffect(() => {
 		if (!keyword) return;
 
-		filterFn(keyword, initialItems)
-			.then((r) => setItems(r))
-			.then(() => setIsOpen(true));
+		const r = filterFn(keyword, initialItems);
+		if (r instanceof Promise) {
+			r.then((fresh) => {
+				setFilteredItems(fresh);
+				setIsOpen(true);
+			});
+		} else {
+			setFilteredItems(r);
+			setIsOpen(true);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [keyword]);
 
 	const closeMenu = () => {
 		setIsOpen(false);
 		setKeyword(undefined);
-		setItems(initialItems);
+		setFilteredItems(initialItems);
 		setHighlightedIndex(-1);
 
 		if (customOnInputValueChange) {
@@ -104,7 +109,11 @@ export function useComboBox<T extends IItem>(
 	});
 
 	const getInputProps: IGetInputProps = () => ({
-		"aria-activedescendant": getActiveItemId(highlightedIndex, items, args),
+		"aria-activedescendant": getActiveItemId(
+			highlightedIndex,
+			filteredItems || initialItems,
+			args
+		),
 		"aria-autocomplete": "list",
 		"aria-controls": isOpen ? `${args.id}-menu` : undefined,
 		"aria-expanded": isOpen,

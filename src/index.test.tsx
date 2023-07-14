@@ -52,7 +52,7 @@ describe("useComboBox", () => {
 			expect(screen.queryAllByRole("option")).toHaveLength(0);
 		});
 
-		it("handles an update to the list of items", () => {
+		it("handles an update to the list of items", async () => {
 			const items = [{ id: "foobar", label: "buzz" }];
 			const { rerender } = render(
 				<Component {...defaultProps} items={items} />

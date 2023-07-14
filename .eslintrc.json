@@ -1,17 +1,15 @@
 {
   "extends": [
     "airbnb-base",
-    "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
-    "plugin:jest/all",
     "plugin:testing-library/react",
     "plugin:testing-library/dom",
-    "prettier"
+    "prettier",
+    "react-app",
+    "react-app/jest"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint",
-    "jest",
     "testing-library"
   ],
   "parserOptions": {

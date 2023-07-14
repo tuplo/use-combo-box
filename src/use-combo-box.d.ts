@@ -6,8 +6,8 @@ export interface IItem {
 	[k: string]: unknown;
 }
 
-export interface IFilterFn<T extends IItem> {
-	(keyword: string, items: T[]): Promise<T[]>;
+export interface IFilterFn<T> {
+	(keyword: string, items: T[]): Promise<T[]> | T[];
 }
 
 export interface IItemToStringFn<T> {
@@ -86,7 +86,7 @@ export interface IGetItemProps<T> {
 	(args: IGetItemPropsArgs<T>): IGetItemPropsReturns;
 }
 
-export interface IUseComboBoxArgs<T extends IItem> {
+export interface IUseComboBoxArgs<T> {
 	filterFn?: IFilterFn<T>;
 	id: string;
 	items?: T[];

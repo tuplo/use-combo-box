@@ -13,16 +13,16 @@ export function slugify(str: string): string {
 		.replace(/^-|-$/g, "");
 }
 
-export async function defaultFilterFn<T extends IItem>(
+export function defaultFilterFn<T extends IItem>(
 	keyword: string,
 	items: T[] = []
-): Promise<T[]> {
+): T[] {
 	return items
 		.filter((item) => item.label)
 		.filter((item) => item.label!.includes(keyword));
 }
 
-export function getItemId<T extends IItem>(item: T, args: IUseComboBoxArgs<T>) {
+export function getItemId<T>(item: T, args: IUseComboBoxArgs<T>) {
 	const { id, itemToString } = args;
 	let itemKey = "";
 	if (itemToString) {
@@ -33,26 +33,24 @@ export function getItemId<T extends IItem>(item: T, args: IUseComboBoxArgs<T>) {
 	return `${id}-option-${itemKey}`;
 }
 
-export function getActiveItemId<T extends IItem>(
+export function getActiveItemId<T>(
 	highlightedIndex: number,
 	items: T[],
 	args: IUseComboBoxArgs<T>
 ) {
 	const activeItem = items[highlightedIndex];
 	if (!activeItem) return undefined;
-	return getItemId<T>(activeItem, args);
+	return getItemId(activeItem, args);
 }
 
-interface IGetArgsReturns<T extends IItem>
+interface IGetArgsReturns<T>
 	extends Omit<IUseComboBoxArgs<T>, "itemToString" | "items" | "filterFn"> {
 	itemToString: IItemToStringFn<T>;
 	items: T[];
 	filterFn: IFilterFn<T>;
 }
 
-export function getArgs<T extends IItem>(
-	userArgs: IUseComboBoxArgs<T>
-): IGetArgsReturns<T> {
+export function getArgs<T>(userArgs: IUseComboBoxArgs<T>): IGetArgsReturns<T> {
 	const defaultItemToString: IItemToStringFn<T> = (item) =>
 		item ? JSON.stringify(item) : "";
 
