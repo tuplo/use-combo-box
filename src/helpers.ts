@@ -17,9 +17,10 @@ export function defaultFilterFn<T extends IItem>(
 	keyword: string,
 	items: T[] = []
 ): T[] {
+	const rg = new RegExp(keyword, "i");
 	return items
 		.filter((item) => item.label)
-		.filter((item) => item.label!.includes(keyword));
+		.filter((item) => rg.test(item.label!));
 }
 
 export function getItemId<T>(item: T, args: IUseComboBoxArgs<T>) {

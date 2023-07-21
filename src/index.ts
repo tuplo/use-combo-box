@@ -7,9 +7,11 @@ import type {
 	IGetComboBoxProps,
 	IGetInputProps,
 	IGetItemProps,
+	IGetItemPropsReturns,
 	IGetLabelProps,
 	IGetMenuProps,
 	IGetToggleButtonProps,
+	IItem,
 	IUseComboBoxArgs,
 	IUseComboBoxReturns,
 } from "./use-combo-box.d";
@@ -19,14 +21,16 @@ export type {
 	IGetComboBoxProps,
 	IGetInputProps,
 	IGetItemProps,
+	IGetItemPropsReturns,
 	IGetLabelProps,
 	IGetMenuProps,
 	IGetToggleButtonProps,
+	IItem,
 	IUseComboBoxArgs,
 	IUseComboBoxReturns,
 };
 
-export function useComboBox<T>(
+export function useComboBox<T extends IItem>(
 	userArgs: IUseComboBoxArgs<T>
 ): IUseComboBoxReturns<T> {
 	const args = getArgs(userArgs);
@@ -182,5 +186,6 @@ export function useComboBox<T>(
 		highlightedIndex,
 		isOpen,
 		items,
+		setIsOpen,
 	};
 }

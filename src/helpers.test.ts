@@ -16,7 +16,7 @@ describe("useComboBox: helpers", () => {
 		])("defaults filter: %s", async (_, items, expected) => {
 			const filter = defaultFilterFn;
 			const labeled = items?.map((label) => ({ label })) as IItem[];
-			const actual = await filter("foo", labeled);
+			const actual = filter("foo", labeled);
 
 			const labeledExpected = expected.map((label) => ({ label })) as IItem[];
 			expect(actual).toStrictEqual(labeledExpected);

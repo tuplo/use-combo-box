@@ -109,4 +109,5 @@ export interface IUseComboBoxReturns<T> {
 	highlightedIndex: number;
 	isOpen: boolean;
 	items: T[];
+	setIsOpen: (isOpen: boolean) => void;
 }
