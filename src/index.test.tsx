@@ -7,13 +7,13 @@ import type { IFilterFn, IUseComboBoxArgs, IItem } from "./use-combo-box.d";
 
 const defaultProps: IUseComboBoxArgs<IItem> = {
 	id: "foobar",
-	itemToString: (item) => item?.id?.toString() || "",
+	itemToString: (item) => item?.value?.toString() || "",
 	onSelectedItemChange: jest.fn(),
 	items: [
-		{ id: "item-1", label: "Alice" },
-		{ id: "item-2", label: "Bob" },
-		{ id: "item-3", label: "Charlie" },
-		{ id: "item-4", label: "Alice Doe" },
+		{ value: "item-1", label: "Alice" },
+		{ value: "item-2", label: "Bob" },
+		{ value: "item-3", label: "Charlie" },
+		{ value: "item-4", label: "Alice Doe" },
 	],
 };
 
@@ -29,7 +29,7 @@ describe("useComboBox", () => {
 
 	describe("initialItems", () => {
 		it("handles a list of initial items", () => {
-			const items = [{ id: "foobar", label: "buzz" }];
+			const items = [{ value: "foobar", label: "buzz" }];
 			render(<Component {...defaultProps} items={items} />);
 
 			expect(screen.getByRole("listbox")).toBeInTheDocument();
@@ -53,13 +53,13 @@ describe("useComboBox", () => {
 		});
 
 		it("handles an update to the list of items", async () => {
-			const items = [{ id: "foobar", label: "buzz" }];
+			const items = [{ value: "foobar", label: "buzz" }];
 			const { rerender } = render(
 				<Component {...defaultProps} items={items} />
 			);
 			expect(screen.getByText("buzz")).toBeInTheDocument();
 
-			const newItems = [{ id: "bazz", label: "quz" }];
+			const newItems = [{ value: "bazz", label: "quz" }];
 			rerender(<Component {...defaultProps} items={newItems} />);
 			expect(screen.getByText("quz")).toBeInTheDocument();
 		});
@@ -80,7 +80,7 @@ describe("useComboBox", () => {
 			const [firstOption] = screen.queryAllByRole("option");
 			expect(firstOption).toHaveAttribute(
 				"id",
-				"foobar-option-id-item-1-label-alice"
+				"foobar-option-value-item-1-label-alice"
 			);
 		});
 	});
@@ -97,9 +97,9 @@ describe("useComboBox", () => {
 
 		it("uses a custom function to filter items", async () => {
 			const customFilter: IFilterFn<IItem> = async () => [
-				{ id: "item-5", label: "David" },
-				{ id: "item-6", label: "Edna" },
-				{ id: "item-6", label: "Fay" },
+				{ value: "item-5", label: "David" },
+				{ value: "item-6", label: "Edna" },
+				{ value: "item-6", label: "Fay" },
 			];
 			render(<Component {...defaultProps} filterFn={customFilter} />);
 			await act(async () => {
@@ -165,6 +165,27 @@ describe("useComboBox", () => {
 		});
 	});
 
+	describe("selectedValue", () => {
+		it.each([
+			["no value", undefined, []],
+			["empty string", "", []],
+			["empty array", [], []],
+			["single", "item-3", ["Charlie"]],
+			["single item", ["item-2"], ["Bob"]],
+			["multiple", ["item-2", "item-3"], ["Bob", "Charlie"]],
+		])("selected value: %s", (_, selectedValue, expected) => {
+			const props = JSON.parse(JSON.stringify(defaultProps));
+			props.selectedValue = selectedValue;
+			const { container } = render(<Component {...props} />);
+
+			// eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+			const selected = container.querySelectorAll('[aria-selected="true"]');
+			const labels = [...selected].map((el) => el.textContent);
+			expect(selected).toHaveLength(expected.length);
+			expect(labels).toStrictEqual(expected);
+		});
+	});
+
 	describe("onSelectedItemChange", () => {
 		it("calls handler when user picks an item (by clicking)", async () => {
 			const onSelectedItemChangeSpy = jest.fn();
@@ -176,7 +197,7 @@ describe("useComboBox", () => {
 			);
 			const [first] = screen.queryAllByRole("option");
 			await user.click(first);
-			const expected = { id: "item-1", label: "Alice" };
+			const expected = { value: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});
@@ -192,7 +213,7 @@ describe("useComboBox", () => {
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "Alice{enter}");
 			});
-			const expected = { id: "item-1", label: "Alice" };
+			const expected = { value: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});
@@ -214,7 +235,7 @@ describe("useComboBox", () => {
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "{Enter}");
 			});
-			const expected = { id: "item-2", label: "Bob" };
+			const expected = { value: "item-2", label: "Bob" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});

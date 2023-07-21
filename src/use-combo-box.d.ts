@@ -1,9 +1,8 @@
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
 
 export interface IItem {
-	id?: string | number;
+	value?: string;
 	label?: string;
-	[k: string]: unknown;
 }
 
 export interface IFilterFn<T> {
@@ -81,6 +80,7 @@ export interface IGetItemPropsReturns {
 	id: string;
 	onClick: (event: MouseEvent) => void;
 	role: "option";
+	selected: boolean;
 }
 export interface IGetItemProps<T> {
 	(args: IGetItemPropsArgs<T>): IGetItemPropsReturns;
@@ -95,6 +95,7 @@ export interface IUseComboBoxArgs<T> {
 	onInputValueChange?: (value?: string) => void;
 	onSelectedItemChange: (item: T) => void;
 	placeholder?: string;
+	selectedValue?: string | string[];
 }
 
 export interface IUseComboBoxReturns<T> {

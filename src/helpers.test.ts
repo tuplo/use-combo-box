@@ -25,7 +25,7 @@ describe("useComboBox: helpers", () => {
 
 	describe("getItemId", () => {
 		it.each([
-			["default", undefined, "id-option-id-foobar-label-label"],
+			["default", undefined, "id-option-value-foobar-label-label"],
 			[
 				"custom itemToString",
 				(item: { label: string }) => item.label,
@@ -35,11 +35,11 @@ describe("useComboBox: helpers", () => {
 				"no id",
 				// @ts-expect-error item doesn't have foo property
 				(item) => item.foo,
-				"id-option-id-foobar-label-label",
+				"id-option-value-foobar-label-label",
 			],
 		])("getItemId: %s", (_, itemToString, expected) => {
 			const args = { id: "id", onSelectedItemChange: jest.fn(), itemToString };
-			const actual = getItemId({ id: "foobar", label: "label" }, args);
+			const actual = getItemId({ value: "foobar", label: "label" }, args);
 
 			expect(actual).toBe(expected);
 		});
@@ -51,11 +51,11 @@ describe("useComboBox: helpers", () => {
 			["no item selected", -1, undefined],
 			["bad index", 2, undefined],
 		])("getActiveItemId: %s", (_, highlightedIndex, expected) => {
-			const items = [{ id: 666 }, { id: 667 }] as IItem[];
+			const items = [{ value: "666" }, { value: "667" }] as IItem[];
 			const args: IUseComboBoxArgs<IItem> = {
 				id: "foobar",
 				onSelectedItemChange: jest.fn(),
-				itemToString: (item) => String(item.id),
+				itemToString: (item) => String(item.value),
 			};
 			const actual = getActiveItemId(highlightedIndex, items, args);
 
@@ -64,11 +64,10 @@ describe("useComboBox: helpers", () => {
 	});
 
 	describe("getArgs", () => {
-		// type ItemType = IItem | undefined;
-		const items = [{ id: 666 }, undefined, { id: 667 }] as IItem[];
+		const items = [{ value: "666" }, undefined, { value: "667" }] as IItem[];
 
 		it.each([
-			["default", 0, '{"id":666}'],
+			["default", 0, '{"value":"666"}'],
 			["falsy item", 1, ""],
 		])("itemToString: %s", (_, index, expected) => {
 			const userArgs: IUseComboBoxArgs<IItem> = {

@@ -37,6 +37,7 @@ export function useComboBox<T>(
 		onInputValueChange: customOnInputValueChange,
 		onSelectedItemChange,
 		placeholder,
+		selectedValue,
 	} = args;
 	const [keyword, setKeyword] = useState<string>();
 	const [filteredItems, setFilteredItems] = useState<T[]>();
@@ -153,15 +154,22 @@ export function useComboBox<T>(
 		role: "listbox",
 	});
 
-	const getItemProps: IGetItemProps<T> = ({ item, index }) => ({
-		"aria-selected": index === highlightedIndex,
-		id: getItemId(item, args),
-		onClick: () => {
-			closeMenu();
-			onSelectedItemChange(item);
-		},
-		role: "option",
-	});
+	const getItemProps: IGetItemProps<T> = ({ item, index }) => {
+		const selected = Array.isArray(selectedValue)
+			? selectedValue.findIndex((sv) => sv === item.value) > -1
+			: item.value === selectedValue || index === highlightedIndex;
+
+		return {
+			"aria-selected": selected,
+			selected,
+			id: getItemId(item, args),
+			onClick: () => {
+				closeMenu();
+				onSelectedItemChange(item);
+			},
+			role: "option",
+		};
+	};
 
 	return {
 		closeMenu,

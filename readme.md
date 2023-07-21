@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <img src="logo.png" alt="Logo" width="120" height="120">
+  <img src="docs/logo.png" alt="Logo" width="120" height="120">
   <h1 align="center">use-combo-box</h3>
   <p align="center">Headless combo-box hook for React</p>
   <p align="center">
@@ -15,7 +15,7 @@
 We tried `downshift` but it was too heavy for our needs.
 
 - No dependencies
-- Tiny footprint (2.3K)
+- Tiny footprint (1.12 kB)
 - WAI-ARIA compliant, implements the [Combobox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/)
 - Keyboard navigation
 
@@ -75,15 +75,16 @@ const comboBoxProps = useComboBox({
   filterFn: async (keyword, items) =>
     items.filter((item) => item.label.includes(keyword)),
   id: "my-combo-box",
-  itemToString: (item) => item.id,
   items: [
-    { id: 1, label: "Alice" },
-    { id: 2, label: "Bob" },
+    { id: "item-1", label: "Alice" },
+    { id: "item-2", label: "Bob" },
   ],
+  itemToString: (item) => item.id,
   label: "Team members",
   onInputValueChange: (value) => console.log(value),
   onSelectedItemChange: (item) => console.log(item),
   placeholder: "Choose team member",
+  selectedValue: ["item-1", "item-2"]
 });
 ```
 
@@ -134,6 +135,12 @@ Callback to be used when user picks an item.
 > `string` | optional
 
 To be used as placeholder text on the textbox.
+
+### selectedValues
+
+> `string | string[]` | optional
+
+List of selected values.
 
 ## License
 
