@@ -184,6 +184,22 @@ describe("useComboBox", () => {
 			expect(selected).toHaveLength(expected.length);
 			expect(labels).toStrictEqual(expected);
 		});
+
+		it("doesn't select anything if no selectedValue and no item.value", () => {
+			const props = JSON.parse(JSON.stringify(defaultProps));
+			props.items = [
+				{ value: undefined, label: "Alice" },
+				{ value: "item-2", label: "Bob" },
+			];
+			const { container } = render(<Component {...props} />);
+
+			const expected: string[] = [];
+			// eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+			const selected = container.querySelectorAll('[aria-selected="true"]');
+			const labels = [...selected].map((el) => el.textContent);
+			expect(selected).toHaveLength(expected.length);
+			expect(labels).toStrictEqual(expected);
+		});
 	});
 
 	describe("onSelectedItemChange", () => {

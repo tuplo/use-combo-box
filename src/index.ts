@@ -159,9 +159,12 @@ export function useComboBox<T extends IItem>(
 	});
 
 	const getItemProps: IGetItemProps<T> = ({ item, index }) => {
-		const selected = Array.isArray(selectedValue)
-			? selectedValue.findIndex((sv) => sv === item.value) > -1
-			: item.value === selectedValue || index === highlightedIndex;
+		let selected = index === highlightedIndex;
+		if (typeof selectedValue !== "undefined") {
+			selected = Array.isArray(selectedValue)
+				? selectedValue.findIndex((sv) => sv === item.value) > -1
+				: item.value === selectedValue;
+		}
 
 		return {
 			"aria-selected": selected,
