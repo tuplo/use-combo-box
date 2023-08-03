@@ -89,6 +89,7 @@ export interface IGetItemProps<T> {
 export interface IUseComboBoxArgs<T> {
 	filterFn?: IFilterFn<T>;
 	id: string;
+	initialIsOpen?: boolean;
 	items?: T[];
 	itemToString?: IItemToStringFn<T>;
 	label?: string;

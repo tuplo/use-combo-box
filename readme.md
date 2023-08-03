@@ -75,6 +75,7 @@ const comboBoxProps = useComboBox({
   filterFn: async (keyword, items) =>
     items.filter((item) => item.label.includes(keyword)),
   id: "my-combo-box",
+  initialIsOpen: true,
   items: [
     { id: "item-1", label: "Alice" },
     { id: "item-2", label: "Bob" },
@@ -99,6 +100,12 @@ A custom function to be called when filtering the list of items according to the
 > `string` | required
 
 Unique identifier for this widget. It's used to build IDs for all child elements.
+
+### initialIsOpen
+
+> `boolean` | optional
+
+Sets the open state of the menu when the combo-box is initialized.
 
 ### itemToString
 

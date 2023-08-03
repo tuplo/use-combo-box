@@ -36,6 +36,7 @@ export function useComboBox<T extends IItem>(
 	const args = getArgs(userArgs);
 	const {
 		filterFn,
+		initialIsOpen = false,
 		items: initialItems = [],
 		label,
 		onInputValueChange: customOnInputValueChange,
@@ -45,7 +46,7 @@ export function useComboBox<T extends IItem>(
 	} = args;
 	const [keyword, setKeyword] = useState<string>();
 	const [filteredItems, setFilteredItems] = useState<T[]>();
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isOpen, setIsOpen] = useState<boolean>(initialIsOpen);
 	const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
 	const items = filteredItems || initialItems;

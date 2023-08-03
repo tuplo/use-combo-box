@@ -202,6 +202,19 @@ describe("useComboBox", () => {
 		});
 	});
 
+	describe("initialIsOpen", () => {
+		it("opens the menu when initialIsOpen is true", () => {
+			render(<Component {...defaultProps} initialIsOpen />);
+			expect(screen.getByRole("listbox")).toBeInTheDocument();
+		});
+
+		it("keeps the menu closed when initialIsOpen is false", () => {
+			render(<Component {...defaultProps} initialIsOpen />);
+			const options = screen.queryAllByRole("option");
+			expect(options).toHaveLength(4);
+		});
+	});
+
 	describe("onSelectedItemChange", () => {
 		it("calls handler when user picks an item (by clicking)", async () => {
 			const onSelectedItemChangeSpy = jest.fn();
