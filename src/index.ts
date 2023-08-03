@@ -171,7 +171,6 @@ export function useComboBox<T extends IItem>(
 			selected,
 			id: getItemId(item, args),
 			onClick: () => {
-				closeMenu();
 				onSelectedItemChange(item);
 			},
 			role: "option",
