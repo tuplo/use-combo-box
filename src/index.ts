@@ -43,6 +43,7 @@ export function useComboBox<T extends IItem>(
 		onSelectedItemChange,
 		placeholder,
 		selectedValue,
+		selectedValues,
 	} = args;
 	const [keyword, setKeyword] = useState<string>();
 	const [filteredItems, setFilteredItems] = useState<T[]>();
@@ -161,10 +162,13 @@ export function useComboBox<T extends IItem>(
 
 	const getItemProps: IGetItemProps<T> = ({ item, index }) => {
 		let selected = index === highlightedIndex;
+
+		if (Array.isArray(selectedValues)) {
+			selected = selectedValues.findIndex((sv) => sv === item.value) > -1;
+		}
+
 		if (typeof selectedValue !== "undefined") {
-			selected = Array.isArray(selectedValue)
-				? selectedValue.findIndex((sv) => sv === item.value) > -1
-				: item.value === selectedValue;
+			selected = item.value === selectedValue;
 		}
 
 		return {

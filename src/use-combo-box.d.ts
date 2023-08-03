@@ -96,7 +96,8 @@ export interface IUseComboBoxArgs<T> {
 	onInputValueChange?: (value?: string) => void;
 	onSelectedItemChange: (item: T) => void;
 	placeholder?: string;
-	selectedValue?: string | string[];
+	selectedValues?: string[];
+	selectedValue?: string;
 }
 
 export interface IUseComboBoxReturns<T> {

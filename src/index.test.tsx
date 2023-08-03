@@ -169,10 +169,7 @@ describe("useComboBox", () => {
 		it.each([
 			["no value", undefined, []],
 			["empty string", "", []],
-			["empty array", [], []],
 			["single", "item-3", ["Charlie"]],
-			["single item", ["item-2"], ["Bob"]],
-			["multiple", ["item-2", "item-3"], ["Bob", "Charlie"]],
 		])("selected value: %s", (_, selectedValue, expected) => {
 			const props = JSON.parse(JSON.stringify(defaultProps));
 			props.selectedValue = selectedValue;
@@ -199,6 +196,16 @@ describe("useComboBox", () => {
 			const labels = [...selected].map((el) => el.textContent);
 			expect(selected).toHaveLength(expected.length);
 			expect(labels).toStrictEqual(expected);
+		});
+	});
+
+	describe("selectedValues", () => {
+		it("accepts a list of selected items", () => {
+			const selectedValues = ["item-1", "item-3"];
+			render(<Component {...defaultProps} selectedValues={selectedValues} />);
+
+			const selected = screen.queryAllByRole("option", { selected: true });
+			expect(selected).toHaveLength(2);
 		});
 	});
 

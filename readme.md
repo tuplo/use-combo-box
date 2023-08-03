@@ -85,7 +85,7 @@ const comboBoxProps = useComboBox({
   onInputValueChange: (value) => console.log(value),
   onSelectedItemChange: (item) => console.log(item),
   placeholder: "Choose team member",
-  selectedValue: ["item-1", "item-2"]
+  selectedValues: ["item-1", "item-2"]
 });
 ```
 
@@ -143,11 +143,17 @@ Callback to be used when user picks an item.
 
 To be used as placeholder text on the textbox.
 
+### selectedValue
+
+> `string` | optional
+
+The selected value. Makes it a single-selection combo-box.
+
 ### selectedValues
 
-> `string | string[]` | optional
+> `string[]` | optional
 
-List of selected values.
+List of selected values. Makes it a multi-selection combo-box.
 
 ## License
 
