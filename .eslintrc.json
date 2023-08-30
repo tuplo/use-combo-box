@@ -9,9 +9,6 @@
     "react-app/jest"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "testing-library"
-  ],
   "parserOptions": {
     "ecmaVersion": 9,
     "project": "./tsconfig.json"
