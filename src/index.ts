@@ -1,5 +1,9 @@
-import type { ChangeEvent, KeyboardEvent } from "react";
-import { useEffect, useState } from "react";
+import {
+	useEffect,
+	useState,
+	type ChangeEvent,
+	type KeyboardEvent,
+} from "react";
 
 import { getActiveItemId, getArgs, getItemId } from "./helpers";
 import type {
