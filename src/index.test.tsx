@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable no-use-before-define */
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -175,7 +176,6 @@ describe("useComboBox", () => {
 			props.selectedValue = selectedValue;
 			const { container } = render(<Component {...props} />);
 
-			// eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
 			const selected = container.querySelectorAll('[aria-selected="true"]');
 			const labels = [...selected].map((el) => el.textContent);
 			expect(selected).toHaveLength(expected.length);
@@ -191,7 +191,6 @@ describe("useComboBox", () => {
 			const { container } = render(<Component {...props} />);
 
 			const expected: string[] = [];
-			// eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
 			const selected = container.querySelectorAll('[aria-selected="true"]');
 			const labels = [...selected].map((el) => el.textContent);
 			expect(selected).toHaveLength(expected.length);
@@ -330,7 +329,7 @@ describe("useComboBox", () => {
 			const input = screen.getByRole("combobox");
 			expect(input).toHaveValue("");
 			expect(input).not.toHaveAttribute("aria-activedescendant");
-			expect(onInputValueChangeSpy).toHaveBeenCalledWith(undefined);
+			expect(onInputValueChangeSpy).toHaveBeenLastCalledWith();
 		});
 	});
 

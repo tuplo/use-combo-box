@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import {
 	useEffect,
 	useState,
@@ -7,11 +8,9 @@ import {
 
 import { getActiveItemId, getArgs, getItemId } from "./helpers";
 import type {
-	IFilterFn,
 	IGetComboBoxProps,
 	IGetInputProps,
 	IGetItemProps,
-	IGetItemPropsReturns,
 	IGetLabelProps,
 	IGetMenuProps,
 	IGetToggleButtonProps,
@@ -32,7 +31,7 @@ export type {
 	IItem,
 	IUseComboBoxArgs,
 	IUseComboBoxReturns,
-};
+} from "./use-combo-box.d";
 
 export function useComboBox<T extends IItem>(
 	userArgs: IUseComboBoxArgs<T>
@@ -79,7 +78,7 @@ export function useComboBox<T extends IItem>(
 		setHighlightedIndex(-1);
 
 		if (customOnInputValueChange) {
-			customOnInputValueChange(undefined);
+			customOnInputValueChange();
 		}
 	};
 
@@ -168,10 +167,10 @@ export function useComboBox<T extends IItem>(
 		let selected = index === highlightedIndex;
 
 		if (Array.isArray(selectedValues)) {
-			selected = selectedValues.findIndex((sv) => sv === item.value) > -1;
+			selected = Boolean(item.value && selectedValues.includes(item.value));
 		}
 
-		if (typeof selectedValue !== "undefined") {
+		if (selectedValue !== undefined) {
 			selected = item.value === selectedValue;
 		}
 

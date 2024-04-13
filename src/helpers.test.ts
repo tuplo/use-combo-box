@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import {
 	defaultFilterFn,
 	getActiveItemId,

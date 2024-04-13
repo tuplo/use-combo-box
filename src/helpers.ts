@@ -8,9 +8,9 @@ import type {
 export function slugify(str: string): string {
 	return str
 		.toLowerCase()
-		.replace(/[^a-z0-9]/g, "-")
-		.replace(/-+/g, "-")
-		.replace(/^-|-$/g, "");
+		.replaceAll(/[^\da-z]/g, "-")
+		.replaceAll(/-+/g, "-")
+		.replaceAll(/^-|-$/g, "");
 }
 
 export function defaultFilterFn<T extends IItem>(
@@ -40,7 +40,10 @@ export function getActiveItemId<T>(
 	args: IUseComboBoxArgs<T>
 ) {
 	const activeItem = items[highlightedIndex];
-	if (!activeItem) return undefined;
+	if (!activeItem) {
+		return;
+	}
+
 	return getItemId(activeItem, args);
 }
 
@@ -52,6 +55,7 @@ interface IGetArgsReturns<T>
 }
 
 export function getArgs<T>(userArgs: IUseComboBoxArgs<T>): IGetArgsReturns<T> {
+	// eslint-disable-next-line unicorn/consistent-function-scoping
 	const defaultItemToString: IItemToStringFn<T> = (item) =>
 		item ? JSON.stringify(item) : "";
 
