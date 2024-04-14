@@ -10,6 +10,7 @@ const defaultProps: IUseComboBoxArgs<IItem> = {
 	id: "foobar",
 	itemToString: (item) => item?.value?.toString() || "",
 	onSelectedItemChange: jest.fn(),
+	initialIsOpen: true,
 	items: [
 		{ value: "item-1", label: "Alice" },
 		{ value: "item-2", label: "Bob" },
@@ -144,7 +145,7 @@ describe("useComboBox", () => {
 			}
 
 			expect(screen.getByRole("combobox")).toHaveValue("");
-			expect(screen.queryAllByRole("option")).toHaveLength(4);
+			expect(screen.queryAllByRole("option")).toHaveLength(0);
 		});
 	});
 
@@ -230,11 +231,29 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
+
 			const [first] = screen.queryAllByRole("option");
 			await user.click(first);
+
 			const expected = { value: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
+		});
+
+		it("closes the menu when user clicks an option", async () => {
+			const onSelectedItemChangeSpy = jest.fn();
+			render(
+				<Component
+					{...defaultProps}
+					onSelectedItemChange={onSelectedItemChangeSpy}
+				/>
+			);
+
+			const [first] = screen.queryAllByRole("option");
+			await user.click(first);
+
+			const options = screen.queryAllByRole("option");
+			expect(options).toHaveLength(0);
 		});
 
 		it("calls handler when user picks an item (by pressing enter)", async () => {
@@ -245,9 +264,11 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
+
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "Alice{enter}");
 			});
+
 			const expected = { value: "item-1", label: "Alice" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
@@ -261,6 +282,7 @@ describe("useComboBox", () => {
 					onSelectedItemChange={onSelectedItemChangeSpy}
 				/>
 			);
+
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			for await (const i of [1, 2]) {
 				await act(async () => {
@@ -270,6 +292,7 @@ describe("useComboBox", () => {
 			await act(async () => {
 				await user.type(screen.getByRole("combobox"), "{Enter}");
 			});
+
 			const expected = { value: "item-2", label: "Bob" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
@@ -325,7 +348,7 @@ describe("useComboBox", () => {
 			});
 
 			const options = screen.queryAllByRole("option");
-			expect(options).toHaveLength(4);
+			expect(options).toHaveLength(0);
 			const input = screen.getByRole("combobox");
 			expect(input).toHaveValue("");
 			expect(input).not.toHaveAttribute("aria-activedescendant");
@@ -375,7 +398,7 @@ describe("useComboBox", () => {
 			});
 
 			it("when the menu is open there's a aria-controls", async () => {
-				render(<Component {...defaultProps} />);
+				render(<Component {...defaultProps} initialIsOpen={false} />);
 
 				await act(async () => {
 					await user.click(screen.getByRole("button"));
@@ -433,6 +456,7 @@ describe("useComboBox", () => {
 
 function Component(props: IUseComboBoxArgs<IItem>) {
 	const {
+		isOpen,
 		getComboBoxProps,
 		getLabelProps,
 		getToggleButtonProps,
@@ -449,13 +473,15 @@ function Component(props: IUseComboBoxArgs<IItem>) {
 				<input {...getInputProps()} />
 				<button {...getToggleButtonProps()}>Toggle</button>
 			</div>
-			<ul {...getMenuProps()}>
-				{items.map((item, index) => (
-					<li key={item.label} {...getItemProps({ item, index })}>
-						{item.label}
-					</li>
-				))}
-			</ul>
+			{isOpen && (
+				<ul {...getMenuProps()}>
+					{items.map((item, index) => (
+						<li key={item.label} {...getItemProps({ item, index })}>
+							{item.label}
+						</li>
+					))}
+				</ul>
+			)}
 		</div>
 	);
 }

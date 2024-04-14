@@ -14,7 +14,8 @@ exports[`useComboBox renders 1`] = `
     >
       <input
         aria-autocomplete="list"
-        aria-expanded="false"
+        aria-controls="foobar-menu"
+        aria-expanded="true"
         aria-haspopup="listbox"
         aria-labelledby="foobar-label"
         autocomplete="off"
@@ -23,7 +24,8 @@ exports[`useComboBox renders 1`] = `
         value=""
       />
       <button
-        aria-expanded="false"
+        aria-controls="foobar-menu"
+        aria-expanded="true"
         aria-labelledby="foobar-label"
         id="foobar-toggle-button"
         tabindex="-1"

@@ -180,6 +180,7 @@ export function useComboBox<T extends IItem>(
 			id: getItemId(item, args),
 			onClick: () => {
 				onSelectedItemChange(item);
+				closeMenu();
 			},
 			role: "option",
 		};
