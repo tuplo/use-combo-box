@@ -1,44 +1,19 @@
 import type { ChangeEvent, KeyboardEvent, MouseEvent } from "react";
 
-export interface IItem {
-	value?: string;
-	label?: string;
-}
-
 export interface IFilterFn<T> {
 	(keyword: string, items: T[]): Promise<T[]> | T[];
 }
 
-export interface IItemToStringFn<T> {
-	(item: T): string;
-}
-
-export interface IGetLabelPropsReturns {
-	id: string;
-	htmlFor: string;
-}
-
-export interface IGetLabelProps {
-	(): IGetLabelPropsReturns;
-}
-export interface IGetComboBoxPropsReturns {
-	role: "group";
-}
 export interface IGetComboBoxProps {
 	(): IGetComboBoxPropsReturns;
 }
 
-export interface IGetToggleButtonPropsReturns {
-	"aria-controls"?: string;
-	"aria-expanded": boolean;
-	"aria-label"?: string;
-	"aria-labelledby"?: string;
-	id: string;
-	tabIndex: number;
-	type: "button";
+export interface IGetComboBoxPropsReturns {
+	role: "group";
 }
-export interface IGetToggleButtonProps {
-	(): IGetToggleButtonPropsReturns;
+
+export interface IGetInputProps {
+	(): IGetInputPropsReturns;
 }
 
 export interface IGetInputPropsReturns {
@@ -56,8 +31,35 @@ export interface IGetInputPropsReturns {
 	role: "combobox";
 	value?: string;
 }
-export interface IGetInputProps {
-	(): IGetInputPropsReturns;
+
+export interface IGetItemProps<T> {
+	(args: IGetItemPropsArgs<T>): IGetItemPropsReturns;
+}
+
+export interface IGetItemPropsArgs<T> {
+	index: number;
+	item: T;
+}
+
+export interface IGetItemPropsReturns {
+	"aria-selected": boolean;
+	id: string;
+	onClick: (event: MouseEvent) => void;
+	role: "option";
+	selected: boolean;
+}
+
+export interface IGetLabelProps {
+	(): IGetLabelPropsReturns;
+}
+
+export interface IGetLabelPropsReturns {
+	htmlFor: string;
+	id: string;
+}
+
+export interface IGetMenuProps {
+	(): IGetMenuPropsReturns;
 }
 
 export interface IGetMenuPropsReturns {
@@ -67,23 +69,27 @@ export interface IGetMenuPropsReturns {
 	role: "listbox";
 }
 
-export interface IGetMenuProps {
-	(): IGetMenuPropsReturns;
+export interface IGetToggleButtonProps {
+	(): IGetToggleButtonPropsReturns;
 }
 
-export interface IGetItemPropsArgs<T> {
-	item: T;
-	index: number;
-}
-export interface IGetItemPropsReturns {
-	"aria-selected": boolean;
+export interface IGetToggleButtonPropsReturns {
+	"aria-controls"?: string;
+	"aria-expanded": boolean;
+	"aria-label"?: string;
+	"aria-labelledby"?: string;
 	id: string;
-	onClick: (event: MouseEvent) => void;
-	role: "option";
-	selected: boolean;
+	tabIndex: number;
+	type: "button";
 }
-export interface IGetItemProps<T> {
-	(args: IGetItemPropsArgs<T>): IGetItemPropsReturns;
+
+export interface IItem {
+	label?: string;
+	value?: string;
+}
+
+export interface IItemToStringFn<T> {
+	(item: T): string;
 }
 
 export interface IUseComboBoxArgs<T> {
@@ -96,8 +102,8 @@ export interface IUseComboBoxArgs<T> {
 	onInputValueChange?: (value?: string) => void;
 	onSelectedItemChange: (item: T) => void;
 	placeholder?: string;
-	selectedValues?: string[];
 	selectedValue?: string;
+	selectedValues?: string[];
 }
 
 export interface IUseComboBoxReturns<T> {

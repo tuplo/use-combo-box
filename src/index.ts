@@ -1,10 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import {
-	useEffect,
-	useState,
-	type ChangeEvent,
-	type KeyboardEvent,
-} from "react";
+import type { ChangeEvent, KeyboardEvent } from "react";
+import { useEffect, useState } from "react";
 
 import { getActiveItemId, getArgs, getItemId } from "./helpers";
 import type {
@@ -68,7 +64,6 @@ export function useComboBox<T extends IItem>(
 			setFilteredItems(r);
 			setIsOpen(true);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [keyword]);
 
 	const closeMenu = () => {
@@ -96,8 +91,8 @@ export function useComboBox<T extends IItem>(
 	};
 
 	const getLabelProps: IGetLabelProps = () => ({
-		id: `${args.id}-label`,
 		htmlFor: `${args.id}-combobox`,
+		id: `${args.id}-label`,
 	});
 
 	const getComboBoxProps: IGetComboBoxProps = () => ({
@@ -107,15 +102,15 @@ export function useComboBox<T extends IItem>(
 	const getToggleButtonProps: IGetToggleButtonProps = () => ({
 		"aria-controls": isOpen ? `${args.id}-menu` : undefined,
 		"aria-expanded": isOpen,
-		"aria-labelledby": label ? undefined : `${args.id}-label`,
 		"aria-label": label,
+		"aria-labelledby": label ? undefined : `${args.id}-label`,
 		id: `${args.id}-toggle-button`,
-		tabIndex: -1,
-		type: "button",
 		onClick: (event: MouseEvent) => {
 			event.preventDefault();
 			setIsOpen(!isOpen);
 		},
+		tabIndex: -1,
+		type: "button",
 	});
 
 	const getInputProps: IGetInputProps = () => ({
@@ -157,13 +152,13 @@ export function useComboBox<T extends IItem>(
 	});
 
 	const getMenuProps: IGetMenuProps = () => ({
-		"aria-labelledby": label ? undefined : `${args.id}-label`,
 		"aria-label": label,
+		"aria-labelledby": label ? undefined : `${args.id}-label`,
 		id: `${args.id}-menu`,
 		role: "listbox",
 	});
 
-	const getItemProps: IGetItemProps<T> = ({ item, index }) => {
+	const getItemProps: IGetItemProps<T> = ({ index, item }) => {
 		let selected = index === highlightedIndex;
 
 		if (Array.isArray(selectedValues)) {
@@ -176,13 +171,13 @@ export function useComboBox<T extends IItem>(
 
 		return {
 			"aria-selected": selected,
-			selected,
 			id: getItemId(item, args),
 			onClick: () => {
 				onSelectedItemChange(item);
 				closeMenu();
 			},
 			role: "option",
+			selected,
 		};
 	};
 

@@ -4,6 +4,24 @@ interface IProps {
 	items: { label: string }[];
 }
 
+function App() {
+	const items = [
+		{ label: "Apple" },
+		{ label: "Banana" },
+		{ label: "Orange" },
+		{ label: "Pineapple" },
+		{ label: "Kiwi" },
+		{ label: "Strawberry" },
+		{ label: "Grapes" },
+	];
+
+	return (
+		<div>
+			<ComboBox items={items} />
+		</div>
+	);
+}
+
 function ComboBox(props: IProps) {
 	const { items: availableItems } = props;
 
@@ -30,29 +48,11 @@ function ComboBox(props: IProps) {
 			</div>
 			<ul {...getMenuProps()}>
 				{items.map((item, index) => (
-					<li key={item.label} {...getItemProps({ item, index })}>
+					<li key={item.label} {...getItemProps({ index, item })}>
 						{item.label}
 					</li>
 				))}
 			</ul>
-		</div>
-	);
-}
-
-function App() {
-	const items = [
-		{ label: "Apple" },
-		{ label: "Banana" },
-		{ label: "Orange" },
-		{ label: "Pineapple" },
-		{ label: "Kiwi" },
-		{ label: "Strawberry" },
-		{ label: "Grapes" },
-	];
-
-	return (
-		<div>
-			<ComboBox items={items} />
 		</div>
 	);
 }

@@ -6,7 +6,7 @@ import {
 	getItemId,
 	slugify,
 } from "./helpers";
-import type { IUseComboBoxArgs, IItem } from "./use-combo-box";
+import type { IItem, IUseComboBoxArgs } from "./use-combo-box";
 
 describe("useComboBox: helpers", () => {
 	describe("defaultFilterFn", () => {
@@ -26,7 +26,7 @@ describe("useComboBox: helpers", () => {
 
 	describe("getItemId", () => {
 		it.each([
-			["default", undefined, "id-option-value-foobar-label-label"],
+			["default", undefined, "id-option-label-label-value-foobar"],
 			[
 				"custom itemToString",
 				(item: { label: string }) => item.label,
@@ -36,11 +36,11 @@ describe("useComboBox: helpers", () => {
 				"no id",
 				// @ts-expect-error item doesn't have foo property
 				(item) => item.foo,
-				"id-option-value-foobar-label-label",
+				"id-option-label-label-value-foobar",
 			],
 		])("getItemId: %s", (_, itemToString, expected) => {
-			const args = { id: "id", onSelectedItemChange: jest.fn(), itemToString };
-			const actual = getItemId({ value: "foobar", label: "label" }, args);
+			const args = { id: "id", itemToString, onSelectedItemChange: vi.fn() };
+			const actual = getItemId({ label: "label", value: "foobar" }, args);
 
 			expect(actual).toBe(expected);
 		});
@@ -55,8 +55,8 @@ describe("useComboBox: helpers", () => {
 			const items = [{ value: "666" }, { value: "667" }] as IItem[];
 			const args: IUseComboBoxArgs<IItem> = {
 				id: "foobar",
-				onSelectedItemChange: jest.fn(),
 				itemToString: (item) => String(item.value),
+				onSelectedItemChange: vi.fn(),
 			};
 			const actual = getActiveItemId(highlightedIndex, items, args);
 
@@ -73,8 +73,8 @@ describe("useComboBox: helpers", () => {
 		])("itemToString: %s", (_, index, expected) => {
 			const userArgs: IUseComboBoxArgs<IItem> = {
 				id: "foobar",
-				onSelectedItemChange: jest.fn(),
 				items,
+				onSelectedItemChange: vi.fn(),
 			};
 			const args = getArgs(userArgs);
 			const actual = args.itemToString(items[index]);

@@ -1,21 +1,23 @@
 /* eslint-disable unicorn/consistent-function-scoping */
+import "@testing-library/jest-dom";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import _pick from "lodash.pick";
 
 import { useComboBox } from ".";
 import type { IFilterFn, IItem, IUseComboBoxArgs } from "./use-combo-box.d";
 
 const defaultProps: IUseComboBoxArgs<IItem> = {
 	id: "foobar",
-	itemToString: (item) => item?.value?.toString() || "",
-	onSelectedItemChange: jest.fn(),
 	initialIsOpen: true,
 	items: [
-		{ value: "item-1", label: "Alice" },
-		{ value: "item-2", label: "Bob" },
-		{ value: "item-3", label: "Charlie" },
-		{ value: "item-4", label: "Alice Doe" },
+		{ label: "Alice", value: "item-1" },
+		{ label: "Bob", value: "item-2" },
+		{ label: "Charlie", value: "item-3" },
+		{ label: "Alice Doe", value: "item-4" },
 	],
+	itemToString: (item) => item?.value?.toString() || "",
+	onSelectedItemChange: vi.fn(),
 };
 
 describe("useComboBox", () => {
@@ -30,7 +32,7 @@ describe("useComboBox", () => {
 
 	describe("initialItems", () => {
 		it("handles a list of initial items", () => {
-			const items = [{ value: "foobar", label: "buzz" }];
+			const items = [{ label: "buzz", value: "foobar" }];
 			render(<Component {...defaultProps} items={items} />);
 
 			expect(screen.getByRole("listbox")).toBeInTheDocument();
@@ -54,13 +56,13 @@ describe("useComboBox", () => {
 		});
 
 		it("handles an update to the list of items", async () => {
-			const items = [{ value: "foobar", label: "buzz" }];
+			const items = [{ label: "buzz", value: "foobar" }];
 			const { rerender } = render(
 				<Component {...defaultProps} items={items} />
 			);
 			expect(screen.getByText("buzz")).toBeInTheDocument();
 
-			const newItems = [{ value: "bazz", label: "quz" }];
+			const newItems = [{ label: "quz", value: "bazz" }];
 			rerender(<Component {...defaultProps} items={newItems} />);
 			expect(screen.getByText("quz")).toBeInTheDocument();
 		});
@@ -81,7 +83,7 @@ describe("useComboBox", () => {
 			const [firstOption] = screen.queryAllByRole("option");
 			expect(firstOption).toHaveAttribute(
 				"id",
-				"foobar-option-value-item-1-label-alice"
+				"foobar-option-label-alice-value-item-1"
 			);
 		});
 	});
@@ -89,23 +91,19 @@ describe("useComboBox", () => {
 	describe("filterFn", () => {
 		it("filters out an item per keyword typed by user", async () => {
 			render(<Component {...defaultProps} />);
-			await act(async () => {
-				await user.type(screen.getByRole("combobox"), "Alice");
-			});
+			await user.type(screen.getByRole("combobox"), "Alice");
 
 			expect(screen.queryAllByRole("option")).toHaveLength(2);
 		});
 
 		it("uses a custom function to filter items", async () => {
 			const customFilter: IFilterFn<IItem> = async () => [
-				{ value: "item-5", label: "David" },
-				{ value: "item-6", label: "Edna" },
-				{ value: "item-6", label: "Fay" },
+				{ label: "David", value: "item-5" },
+				{ label: "Edna", value: "item-6" },
+				{ label: "Fay", value: "item-6" },
 			];
 			render(<Component {...defaultProps} filterFn={customFilter} />);
-			await act(async () => {
-				await user.type(screen.getByRole("combobox"), "Alice");
-			});
+			await user.type(screen.getByRole("combobox"), "Alice");
 
 			expect(screen.queryAllByRole("option")).toHaveLength(3);
 			expect(screen.getByText("Edna")).toBeInTheDocument();
@@ -114,7 +112,7 @@ describe("useComboBox", () => {
 
 	describe("onInputValueChange", () => {
 		it("calls handler if provided when user types", async () => {
-			const onInputValueChangeSpy = jest.fn();
+			const onInputValueChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -172,27 +170,41 @@ describe("useComboBox", () => {
 			["empty string", "", []],
 			["single", "item-3", ["Charlie"]],
 		])("selected value: %s", (_, selectedValue, expected) => {
-			const props = structuredClone(defaultProps);
+			const props: IUseComboBoxArgs<IItem> = {
+				...structuredClone(
+					_pick(defaultProps, ["id", "initialIsOpen", "items"])
+				),
+				itemToString: (item) => item?.value?.toString() || "",
+				onSelectedItemChange: vi.fn(),
+			};
 			props.selectedValue = selectedValue;
 			const { container } = render(<Component {...props} />);
 
 			const selected = container.querySelectorAll('[aria-selected="true"]');
-			const labels = [...selected].map((el) => el.textContent);
+			// eslint-disable-next-line unicorn/prefer-spread
+			const labels = Array.from(selected).map((el) => el.textContent);
 			expect(selected).toHaveLength(expected.length);
 			expect(labels).toStrictEqual(expected);
 		});
 
 		it("doesn't select anything if no selectedValue and no item.value", () => {
-			const props = structuredClone(defaultProps);
+			const props: IUseComboBoxArgs<IItem> = {
+				...structuredClone(
+					_pick(defaultProps, ["id", "initialIsOpen", "items"])
+				),
+				itemToString: (item) => item?.value?.toString() || "",
+				onSelectedItemChange: vi.fn(),
+			};
 			props.items = [
-				{ value: undefined, label: "Alice" },
-				{ value: "item-2", label: "Bob" },
+				{ label: "Alice", value: undefined },
+				{ label: "Bob", value: "item-2" },
 			];
 			const { container } = render(<Component {...props} />);
 
 			const expected: string[] = [];
 			const selected = container.querySelectorAll('[aria-selected="true"]');
-			const labels = [...selected].map((el) => el.textContent);
+			// eslint-disable-next-line unicorn/prefer-spread
+			const labels = Array.from(selected).map((el) => el.textContent);
 			expect(selected).toHaveLength(expected.length);
 			expect(labels).toStrictEqual(expected);
 		});
@@ -223,7 +235,7 @@ describe("useComboBox", () => {
 
 	describe("onSelectedItemChange", () => {
 		it("calls handler when user picks an item (by clicking)", async () => {
-			const onSelectedItemChangeSpy = jest.fn();
+			const onSelectedItemChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -234,13 +246,13 @@ describe("useComboBox", () => {
 			const [first] = screen.queryAllByRole("option");
 			await user.click(first);
 
-			const expected = { value: "item-1", label: "Alice" };
+			const expected = { label: "Alice", value: "item-1" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});
 
 		it("closes the menu when user clicks an option", async () => {
-			const onSelectedItemChangeSpy = jest.fn();
+			const onSelectedItemChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -256,7 +268,7 @@ describe("useComboBox", () => {
 		});
 
 		it("calls handler when user picks an item (by pressing enter)", async () => {
-			const onSelectedItemChangeSpy = jest.fn();
+			const onSelectedItemChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -268,13 +280,13 @@ describe("useComboBox", () => {
 				await user.type(screen.getByRole("combobox"), "Alice{enter}");
 			});
 
-			const expected = { value: "item-1", label: "Alice" };
+			const expected = { label: "Alice", value: "item-1" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});
 
 		it("calls handler when user picks an item (by pressing down and enter)", async () => {
-			const onSelectedItemChangeSpy = jest.fn();
+			const onSelectedItemChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -292,7 +304,7 @@ describe("useComboBox", () => {
 				await user.type(screen.getByRole("combobox"), "{Enter}");
 			});
 
-			const expected = { value: "item-2", label: "Bob" };
+			const expected = { label: "Bob", value: "item-2" };
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledTimes(1);
 			expect(onSelectedItemChangeSpy).toHaveBeenCalledWith(expected);
 		});
@@ -335,7 +347,7 @@ describe("useComboBox", () => {
 		});
 
 		it("resets combo box when user clicks Escape", async () => {
-			const onInputValueChangeSpy = jest.fn();
+			const onInputValueChangeSpy = vi.fn();
 			render(
 				<Component
 					{...defaultProps}
@@ -455,13 +467,13 @@ describe("useComboBox", () => {
 
 function Component(props: IUseComboBoxArgs<IItem>) {
 	const {
-		isOpen,
 		getComboBoxProps,
-		getLabelProps,
-		getToggleButtonProps,
 		getInputProps,
 		getItemProps,
+		getLabelProps,
 		getMenuProps,
+		getToggleButtonProps,
+		isOpen,
 		items,
 	} = useComboBox(props);
 
@@ -475,7 +487,7 @@ function Component(props: IUseComboBoxArgs<IItem>) {
 			{isOpen && (
 				<ul {...getMenuProps()}>
 					{items.map((item, index) => (
-						<li key={item.label} {...getItemProps({ item, index })}>
+						<li key={item.label} {...getItemProps({ index, item })}>
 							{item.label}
 						</li>
 					))}

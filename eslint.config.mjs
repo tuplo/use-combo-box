@@ -1,11 +1,12 @@
 import js from "@eslint/js";
+import vitest from "@vitest/eslint-plugin";
 import prettier from "eslint-config-prettier";
+import perfectionist from "eslint-plugin-perfectionist";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import unicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import vitest from "eslint-plugin-vitest";
 
 export default [
 	{
@@ -18,23 +19,31 @@ export default [
 	unicorn.configs["flat/recommended"],
 	prettier,
 	{
+		plugins: {
+			perfectionist,
+		},
+		rules: {
+			...perfectionist.configs["recommended-alphabetical"].rules,
+			"perfectionist/sort-imports": "off",
+		},
+	},
+	{
+		files: ["**/*.tsx"],
 		languageOptions: {
 			parserOptions: {
 				ecmaFeatures: { jsx: true },
 			},
 		},
-		settings: {
-			react: { version: "detect" },
-		},
-		files: ["**/*.{tsx,ts}"],
 		plugins: {
-			"react-hooks": reactHooks,
 			react,
+			"react-hooks": reactHooks,
 		},
 		rules: {
 			...reactHooks.configs.recommended.rules,
 			...react.configs.recommended.rules,
-			"react/react-in-jsx-scope": "off",
+		},
+		settings: {
+			react: { version: "detect" },
 		},
 	},
 	{
@@ -51,9 +60,10 @@ export default [
 	},
 	{
 		rules: {
+			"react/react-in-jsx-scope": "off",
+			"unicorn/numeric-separators-style": "off",
 			"unicorn/prefer-top-level-await": "off",
 			"unicorn/prevent-abbreviations": "off",
-			"unicorn/numeric-separators-style": "off",
 		},
 	},
 ];
