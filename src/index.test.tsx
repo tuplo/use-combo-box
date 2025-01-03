@@ -1,10 +1,9 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable no-use-before-define */
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { useComboBox } from ".";
-import type { IFilterFn, IUseComboBoxArgs, IItem } from "./use-combo-box.d";
+import type { IFilterFn, IItem, IUseComboBoxArgs } from "./use-combo-box.d";
 
 const defaultProps: IUseComboBoxArgs<IItem> = {
 	id: "foobar",
@@ -173,7 +172,7 @@ describe("useComboBox", () => {
 			["empty string", "", []],
 			["single", "item-3", ["Charlie"]],
 		])("selected value: %s", (_, selectedValue, expected) => {
-			const props = JSON.parse(JSON.stringify(defaultProps));
+			const props = structuredClone(defaultProps);
 			props.selectedValue = selectedValue;
 			const { container } = render(<Component {...props} />);
 
@@ -184,7 +183,7 @@ describe("useComboBox", () => {
 		});
 
 		it("doesn't select anything if no selectedValue and no item.value", () => {
-			const props = JSON.parse(JSON.stringify(defaultProps));
+			const props = structuredClone(defaultProps);
 			props.items = [
 				{ value: undefined, label: "Alice" },
 				{ value: "item-2", label: "Bob" },

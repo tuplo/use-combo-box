@@ -5,7 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import unicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import jest from "eslint-plugin-jest";
+import vitest from "eslint-plugin-vitest";
 
 export default [
 	{
@@ -39,11 +39,14 @@ export default [
 	},
 	{
 		files: ["*.test.ts*"],
+		languageOptions: {
+			globals: { ...vitest.environments.env.globals },
+		},
 		plugins: {
-			jest,
+			vitest,
 		},
 		rules: {
-			...jest.configs.recommended.rules,
+			...vitest.configs.recommended.rules,
 		},
 	},
 	{
